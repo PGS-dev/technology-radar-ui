@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 
+import './Snapshots.css';
+
 class Snapshots extends Component {
     render() {
         const snapshots = this.props.snapshots;
 
         return (
-            <div>
+            <div className="snapshots-detach">
                 {snapshots.map( s => (
-                    <div>{s}</div>
+                    <span key={s.name} className="">{s.name}{" | "}</span>
                 ))}
             </div>
         );
-    }
-
-    magic() {
-
     }
 }
 

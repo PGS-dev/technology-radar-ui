@@ -1,0 +1,39 @@
+.container {
+    margin: 0 auto;
+    max-width: 100vh;
+}
+
+.scaling-svg-container {
+    position: relative;
+    height:0;
+    width: 100%;
+    padding: 0;
+    padding-bottom: 100%;
+}
+
+.scaling-svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top:0;
+}
+
+.debugLayer {
+//  opacity: 0;
+}
+
+.itemLabel, .legendLabel, .areaLabel {
+    font-family: 'Oswald', sans-serif;
+    opacity: 1;
+    transform-origin: top right;
+    -moz-transform-origin: 0 0;
+}
+
+.areaFill {
+    opacity: 0.5;
+}
+
+.areaLabelArc {
+    fill: none;
+}

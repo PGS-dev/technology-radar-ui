@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Snapshots from './Snapshots';
+import RadarChart from './RadarChart';
 
 class Radar extends Component {
     constructor(props) {
@@ -11,9 +12,11 @@ class Radar extends Component {
             snapshots: []
         };
 
-        const url = `http://pgslnx232.pgs-soft.com:8090/api/radars/${this.props.match.params.spreadsheetId}/snapshots`;
+        this.spreadsheetId = this.props.match.params.spreadsheetId;
 
-        fetch(url).then(response => response.json()).then(s => this.setState({snapshots: s})).catch(m => console.log(m))
+        const url = `http://pgslnx232.pgs-soft.com:8090/api/radars/${this.spreadsheetId}/snapshots`;
+
+        fetch(url).then(response => response.json()).then(s => this.setState({snapshots: s, loading:false})).catch(m => console.log(m))
     }
 
     render() {
@@ -21,15 +24,14 @@ class Radar extends Component {
 
         return (
             <div>
-                <h1>Radar</h1>
-                <div>RadarID: {this.props.match.params.spreadsheetId}</div>
-                <Snapshots snapshots={snapshots}/>
+                <div className="debug-radarId" style={{display: 'none'}}>RadarID: {this.spreadsheetId}</div>
+                <Snapshots snapshots={snapshots} />
+                {this.state.loading ?
+                    'Loading' :
+                    <RadarChart snapshots={snapshots} spreadsheetId={this.spreadsheetId}/>
+                }
             </div>
         );
-    }
-
-    magic() {
-
     }
 }
 
