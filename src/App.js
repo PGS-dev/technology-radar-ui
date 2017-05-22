@@ -12,7 +12,7 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <Router basename="/technology-radar-ui/">
           <main>
               <Route exact={true} path="/" component={Home} />
               <Route path="/:spreadsheetId" component={Radar} />
