@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import MagicChart from "./MagicChart";
 
+import { dataService } from './DataService';
+
 class RadarChart extends Component {
     constructor(props) {
         super(props);
@@ -8,14 +10,31 @@ class RadarChart extends Component {
         this.state ={
             loading: true,
             data: {}
-        }
+        };
 
-        this.spreadsheetId = this.props.spreadsheetId;
-        this.snapshotId = this.props.snapshots[1].name;
+        this.getData(this.props);
 
-        const url = `http://pgslnx232.pgs-soft.com:8090/api/radars/${this.spreadsheetId}/snapshots/${this.snapshotId}`;
+    }
 
-        fetch(url).then(response => response.json()).then(data => this.setState({data, loading: false})).catch(m => console.log(m))
+    getData(props) {
+        this.spreadsheetId = props.spreadsheetId;
+        this.snapshotId = props.snapshotId;
+
+        dataService.getBlips(this.spreadsheetId, this.snapshotId)
+            .then(
+                data => this.setState({
+                    data,
+                    loading: false
+                })
+            );
+    }
+
+    componentWillReceiveProps(nexrProps) {
+        this.setState({
+            loading: true
+        });
+
+        this.getData(nexrProps);
     }
 
     render() {
@@ -25,10 +44,6 @@ class RadarChart extends Component {
                     <MagicChart data={this.state.data}/>}
             </div>
         );
-    }
-
-    magic() {
-
     }
 }
 
