@@ -2,9 +2,13 @@
     position: absolute;
     top: 0;
     left: 0;
-
 }
 
-.active {
+.snapshots-detach a {
+    color: #ff7408;
+}
+
+.snapshots-detach .active {
+    color: #ff7408;
     font-weight: bold;
 }

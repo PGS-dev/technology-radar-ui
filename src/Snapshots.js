@@ -20,8 +20,7 @@ class Snapshots extends Component {
                                 <span key={name}>
                                     <Link
                                         to={{
-                                            pathname: '/',
-                                            search: `?id=${spreadsheetId}&snapshot=${name}`,
+                                            pathname: `/${spreadsheetId}/${name}`,
                                         }}
                                         className={active}
                                     >

@@ -9,18 +9,17 @@ class Radar extends Component {
     constructor(props) {
         super(props);
 
-        const searchParams = new URLSearchParams(this.props.location.search);
+        const { spreadsheetId, snapshotId } = this.props.match.params;
 
-        const hasId = searchParams.has('id')
         this.state = {
-            loading: hasId,
-            spreadsheetId: hasId ? searchParams.get('id') : null,
+            loading: !!spreadsheetId,
+            spreadsheetId: spreadsheetId,
             snapshots: [],
-            snapshotId: searchParams.has('snapshot') ? searchParams.get('snapshot') : null,
+            snapshotId: snapshotId,
         };
 
 
-        if (hasId) {
+        if (!!spreadsheetId) {
             this.getData();
         }
     }
@@ -38,10 +37,10 @@ class Radar extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const searchParams = new URLSearchParams(nextProps.location.search);
+        const { spreadsheetId, snapshotId } = nextProps.match.params;
         this.setState({
-            spreadsheetId: searchParams.has('id') ? searchParams.get('id') : null,
-            snapshotId: searchParams.has('snapshot') ? searchParams.get('snapshot') : null,
+            spreadsheetId: spreadsheetId,
+            snapshotId: snapshotId,
         });
     }
 
@@ -53,7 +52,8 @@ class Radar extends Component {
         return (
             <div>
                 {!spreadsheetId ?
-                    'Id is missing in query params i.e. id=18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg' :
+                    'Id is missing in path i.e. ' +
+                    'https://pgs-dev.github.io/technology-radar-ui/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg' :
                     this.state.loading ?
                         'Loading' :
                         <div>
