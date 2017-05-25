@@ -15,11 +15,11 @@ const HISTORY_COLOR = '#7a7a7a';
 
 const PI = 3.14159;
 
-function drawChart(data) {
+function drawChart(data, clickHandler) {
     console.log('raw data', data.items.filter(i => !!i.history));
 
     const svg = d3.select('#radar');
-    const config = getConfig(svg, data.items);
+    const config = getConfig(svg, data.items, clickHandler);
 
     let g = svg.append('g')
         .attr('transform', `translate(${config.center.x}, ${config.center.y})`);
@@ -121,6 +121,7 @@ function drawItemLabels(selection, items, config) {
         .attr('text-anchor', (d, idx) => {
             return config.scaleRadialPosition(idx) <= PI ? 'start' : 'end';
         })
+        .on('click', config.clickHandler)
         .text(d => `${!!d._isNew ? '* ' : ''} ${d.name}`);
 }
 
@@ -624,7 +625,7 @@ function deg2rad(deg) {
     return deg * (PI / 180);
 }
 
-function getConfig(containerEl, items) {
+function getConfig(containerEl, items, clickHandler) {
     const width = 1000;
     const height = 1000;
     const legendReserverAngle = 12;
@@ -695,7 +696,8 @@ function getConfig(containerEl, items) {
         angleStart,
         angleEnd,
         angleStep,
-        statuses
+        statuses,
+        clickHandler
     }
 }
 
@@ -827,7 +829,7 @@ function endAll(transition, callback) {
         });
 }
 
-function magicInit(data) {
+function magicInit(data, clickHandler) {
 
-    drawChart(processData(data));
+    drawChart(processData(data), clickHandler);
 }

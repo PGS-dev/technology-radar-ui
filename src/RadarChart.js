@@ -41,7 +41,7 @@ class RadarChart extends Component {
         return (
             <div>
                 {this.state.loading ? '' :
-                    <MagicChart data={this.state.data}/>}
+                    <MagicChart data={this.state.data} onItemClick={this.props.onItemClick}/>}
             </div>
         );
     }

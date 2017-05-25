@@ -22,6 +22,8 @@ class Radar extends Component {
         if (!!spreadsheetId) {
             this.getData();
         }
+
+        this.onItemClick = this.onItemClick.bind(this);
     }
 
     getData() {
@@ -42,6 +44,12 @@ class Radar extends Component {
             spreadsheetId: spreadsheetId,
             snapshotId: snapshotId,
         });
+    }
+
+    onItemClick(e) {
+        this.props.history.push(
+            `${this.state.spreadsheetId}/blip/${encodeURIComponent(e.name)}`
+        );
     }
 
     render() {
@@ -66,6 +74,7 @@ class Radar extends Component {
                                 snapshots={snapshots}
                                 spreadsheetId={spreadsheetId}
                                 snapshotId={snapshotId}
+                                onItemClick={this.onItemClick}
                             />
                         </div>
                 }

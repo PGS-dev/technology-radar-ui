@@ -17,6 +17,7 @@ class App extends Component {
         <div>
             <Router basename="/technology-radar-ui">
                 <Switch>
+                    {/* order of Routes is meaningful */}
                     <Route exact path="/" component={Radar} />
                     <Route path="/:spreadsheetId/blip/:blipId" component={Blip} />
                     <Route path="/:spreadsheetId/:snapshotId" component={Radar} />

@@ -4,7 +4,7 @@ import './MagicChart.css';
 
 class MagicChart extends Component {
     componentDidMount() {
-        window.magicInit(this.props.data);
+        window.magicInit(this.props.data, this.props.onItemClick);
     }
 
     render() {
