@@ -1,0 +1,17 @@
+
+.blipContainer {
+    margin: 0 20px;
+}
+
+.blipName {
+    font-size: 36px;
+    color: #000;
+}
+
+.blipSection {
+    color: #777;
+}
+
+.blipDescription {
+    margin: 25px 5px;
+}

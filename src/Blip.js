@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 import { dataService } from './DataService';
+import BlipHistory from './BlipHistory';
+
+import './Blip.css';
 
 class Blip extends Component {
     constructor(props) {
@@ -30,21 +33,22 @@ class Blip extends Component {
     render() {
         const { loading, data } = this.state;
         return (
-            <div>
-                {loading && 'Loading data'}
+            <div className="blipContainer">
+                {loading && <div className="loading">Loading ...</div>}
                 {!loading && (
                     <div>
-                        <h1>{data.name}</h1>
+                        <h1 className="blipName">{data.name}</h1>
+                        <h3>{data.section}</h3>
+                        <div className="blipDescription">{data.description}</div>
 
-                        <div><h4>Status:</h4> {data.status}</div>
-                        <div><h4>Previous Status:</h4> {data.previousStatus}</div>
-                        <div><h4>Section:</h4> {data.section}</div>
-                        <div><h4>Description:</h4> {data.description}</div>
+                        <BlipHistory history={data.history} />
                     </div>
                 )}
             </div>
         );
     }
 }
+
+
 
 export default Blip;
