@@ -30,6 +30,13 @@
     -moz-transform-origin: 0 0;
 }
 
+.itemLabel:hover {
+    font-weight: bold;
+}
+.itemLabel {
+    cursor: pointer;
+}
+
 .areaFill {
     opacity: 0.5;
 }
