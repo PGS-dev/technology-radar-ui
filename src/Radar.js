@@ -40,16 +40,20 @@ class Radar extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { spreadsheetId, snapshotId } = nextProps.match.params;
+        const { snapshots } = this.state;
         this.setState({
             spreadsheetId: spreadsheetId,
-            snapshotId: snapshotId,
+            snapshotId: snapshotId || (snapshots.length ? snapshots[0].name : null),
         });
     }
 
     onItemClick(e) {
-        this.props.history.push(
-            `${this.state.spreadsheetId}/blip/${encodeURIComponent(e.name)}`
-        );
+        let url = `blip/${encodeURIComponent(e.name)}`;
+
+        if (!this.props.location.pathname.includes('/', 1)) {
+            url = `${this.state.spreadsheetId}/${url}`;
+        }
+        this.props.history.push(url);
     }
 
     render() {
