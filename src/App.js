@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Switch, Route  } from 'react-router-dom';
 
 import Blip from './Blip';
 import Radar from './Radar';
+import NavBar from "./navbar/NavBar";
+import RadarNav from "./navbar/RadarNav";
+import Home from "./Home";
 
 const PageNotFound = ({match}) => (
     <div>
@@ -14,19 +17,25 @@ const PageNotFound = ({match}) => (
 class App extends Component {
   render() {
     return (
-        <div>
-            <Router basename="/technology-radar-ui">
-                <Switch>
-                    {/* order of Routes is meaningful */}
-                    <Route exact path="/" component={Radar} />
-                    <Route path="/:spreadsheetId/blip/:blipId" component={Blip} />
-                    <Route path="/:spreadsheetId/:snapshotId" component={Radar} />
-                    <Route path="/:spreadsheetId/" component={Radar} />
-                    <Route path="/:spreadsheetId" component={Radar} />
-                    <Route component={PageNotFound} />
-                </Switch>
-            </Router>
-        </div>
+        <Router basename="/technology-radar-ui">
+            <div>
+                <NavBar>
+                    <Route path="/:spreadsheetId" component={RadarNav} />
+                </NavBar>
+
+                <div className="content">
+                    <Switch>
+                        {/* order of Routes is meaningful */}
+                        <Route exact path="/" component={Home} />
+                        <Route path="/:spreadsheetId/blip/:blipId" component={Blip} />
+                        <Route path="/:spreadsheetId/:snapshotId" component={Radar} />
+                        <Route path="/:spreadsheetId/" component={Radar} />
+                        <Route path="/:spreadsheetId" component={Radar} />
+                        <Route component={PageNotFound} />
+                    </Switch>
+                </div>
+            </div>
+        </Router>
     );
   }
 }

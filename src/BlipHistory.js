@@ -4,10 +4,10 @@ import './BlipHistory.css';
 
 const BlipHistory = ({ history }) => (
     <div className="history">
-        <div className="historyline"></div>
+        <div className="historyline" />
         {history.map( (entry, i) => (
             <div className={i === 0 ? 'historyEntry' : 'historyEntry old'} key={i}>
-                <div className="historyDot"></div>
+                <div className="historyDot" />
                 <div className="historyHeader">
                     <h2 className="historyTitle">{entry.newStatus}</h2>
                 </div>

@@ -8,6 +8,10 @@ html, body {
   font-family: Arial;
 }
 
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
 *, ::after, ::before {
   box-sizing: border-box;
 }

@@ -5,6 +5,8 @@ import RadarChart from './RadarChart';
 
 import { dataService } from './DataService';
 
+import './Radar.css';
+
 class Radar extends Component {
     constructor(props) {
         super(props);
@@ -62,7 +64,7 @@ class Radar extends Component {
         const spreadsheetId = this.state.spreadsheetId;
 
         return (
-            <div>
+            <div className="Radar">
                 {!spreadsheetId ?
                     'Id is missing in path i.e. ' +
                     'https://pgs-dev.github.io/technology-radar-ui/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg' :
