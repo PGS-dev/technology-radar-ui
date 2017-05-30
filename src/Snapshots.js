@@ -17,7 +17,7 @@ class Snapshots extends Component {
                             const name = s.name;
                             const active = snapshotId === name ? 'active' : '';
                             return (
-                                <span key={name}>
+                                <div key={name}>
                                     <Link
                                         to={{
                                             pathname: `/${spreadsheetId}/${name}`,
@@ -26,8 +26,7 @@ class Snapshots extends Component {
                                     >
                                         {s.name}
                                     </Link>
-                                    {' | '}
-                                </span>
+                                </div>
                             )
                         }
                     )
