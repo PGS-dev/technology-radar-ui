@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const RadarNav = ({match}) => (
     <span>
-        <a href={`/${match.params.spreadsheetId}`} className="NavBarLink">Radar home</a>
-        <a href={`/${match.params.spreadsheetId}/blips`} className="NavBarLink">All blips</a>
+        <Link to={{pathname: `/${match.params.spreadsheetId}`}}>Technology radar</Link>
+        {/*<Link to={{pathname: `/${match.params.spreadsheetId}/blips`}}>All blips</Link>*/}
     </span>
 );
 
