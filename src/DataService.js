@@ -1,6 +1,6 @@
 
 class DataService {
-    static URL = 'http://pgslnx232.pgs-soft.com:8090/api/radars';
+    static URL = 'https://pgslnx232.pgs-soft.com:8090/api/radars';
 
     getSnapshots(spreadsheetId) {
         const url = `${DataService.URL}/${spreadsheetId}/snapshots`;
