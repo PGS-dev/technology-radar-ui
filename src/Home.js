@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Home extends Component {
     render() {
@@ -6,8 +7,16 @@ class Home extends Component {
             <div>
                 <h1>Latest radars</h1>
                 <ul>
-                    <li>1zFPyiu09W5t_O0hK8L5VI7SiwQi71WwBBub8kq3h_sw - frontend radar</li>
-                    <li>18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg - example radar</li>
+                    <li>
+                        <Link to={{ pathname: `/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/` }}>
+                            Frontend Radar
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to={{ pathname: `/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg/` }}>
+                            Example Radar
+                        </Link>
+                    </li>
                 </ul>
             </div>
         );
