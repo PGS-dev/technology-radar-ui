@@ -1,25 +1,17 @@
-// const URL = 'https://technology-radar.firebaseio.com/snapshots/PGSNET/august-2016.json';
-// const URL = 'https://technology-radar.firebaseio.com/snapshots/pgs-frontend/march-2017.json';
-const URL = 'http://pgslnx232.pgs-soft.com:8090/api/radars/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg/snapshots/March%202017';
-
-// const AREA_COLORS = ['#2A9D8F', '#E9C46A', '#F4A261', '#E76F51'];
 const AREA_COLORS = ['#5BC0EB', '#7FB800', '#FFB30F', '#FD151B'];
-const STATUS_COLORS = {
-    'Hold': '#f7f7f7',
-    'Trial': '#f7f7f7',
-    'Assess': '#f7f7f7',
-    'Adopt': '#f7f7f7'
-};
-
 const HISTORY_COLOR = '#7a7a7a';
-
 const PI = 3.14159;
 
 function drawChart(data, clickHandler) {
     console.log('raw data', data.items.filter(i => !!i.history));
 
     const svg = d3.select('#radar');
-    const config = getConfig(svg, data.items, clickHandler);
+    const config = getConfig(svg, data.items, data.statuses, clickHandler);
+
+    if (!config) {
+        console.warn('No data to generate radar.', data);
+        return false;
+    }
 
     let g = svg.append('g')
         .attr('transform', `translate(${config.center.x}, ${config.center.y})`);
@@ -57,11 +49,6 @@ function drawDebugLayer(selection, config) {
         .x(d => d[0])
         .y(d => d[1]);
 
-    let lineData = d3.range(0, config.count).map(n => [
-        [125 * Math.cos(config.scaleRadialPositionWithBaseShift(n)), 125 * Math.sin(config.scaleRadialPositionWithBaseShift(n))],
-        [(config.radiusMax - 10) * Math.cos(config.scaleRadialPositionWithBaseShift(n)), (config.radiusMax - 10) * Math.sin(config.scaleRadialPositionWithBaseShift(n))]
-    ]);
-
     debugGroup
         .append('path')
         .datum([
@@ -83,19 +70,6 @@ function drawDebugLayer(selection, config) {
         .attr('stroke', 'blue')
         .attr('stroke-width', 2)
         .attr('d', lineFn);
-
-    /*debugGroup
-     .append('g')
-     .attr('class', 'debugLines')
-     .selectAll('path')
-     .data(lineData)
-     .enter()
-     .append('path')
-     .attr('fill', 'none')
-     .attr('stroke', 'red')
-     .attr('stroke-width', 0.5)
-     .attr('d', lineFn);*/
-
 }
 
 function drawItemLabels(selection, items, config) {
@@ -158,23 +132,6 @@ function drawAreaLebels(selection, data, config) {
         .attr('class', 'areaLine')
         .attr('fill', d => d.color)
         .attr('d', arc)
-    // .transition()
-    // .duration(750)
-    //.attrTween('d', arcTween(arc));
-    /*
-     let arcLabelTag = d3.arc()
-     .innerRadius(config.radiusMax - 10)
-     .outerRadius(config.radiusMax - 30)
-     .startAngle(d => d.startAngle)
-     .endAngle(d => d.endAngle)
-
-     group.selectAll('.areaLabelTag')
-     .data(areasData)
-     .enter()
-     .append('path')
-     .attr('class', 'areaLabelTag')
-     .attr('fill', d => d.color)
-     .attr('d', arcLabel)*/
 
     let labelRadius = config.radiusMin - 21.5;
 
@@ -355,23 +312,11 @@ function drawLegend(selection, data, config) {
             .endAngle(config.angleEnd)();
     };
 
-    /*selection.selectAll('.legendArcInner')
-     .data(statuses)
-     .enter()
-     .append('path')
-     .attr('class', 'legendArcInner')
-     .attr('fill', '#e2e2e2')
-     .attr('d', d => arcInner(d));*/
-
-
     selection.selectAll('.legendArcBg')
         .data(statuses)
         .enter()
         .append('path')
         .attr('class', 'legendArcBg')
-        // .attr('fill', d => (!!(d.idx % 2) ? 'none' : '#DAE5DF'))
-        // .attr('fill', d => STATUS_COLORS[d.name])
-        // .attr('fill','#E7E7E7')
         .attr('fill', 'url(#MyGradient)')
         .attr('d', d => arcBg(d));
 
@@ -380,8 +325,6 @@ function drawLegend(selection, data, config) {
         .enter()
         .append('path')
         .attr('class', 'legendArcOuter')
-        // .attr('fill', d => (!!(d.idx % 2) ? 'none' : '#DAE5DF'))
-        // .attr('fill', d => STATUS_COLORS[d.name])
         .attr('fill', '#f7f7f7')
         .attr('d', d => arcOuter(d));
 
@@ -415,12 +358,11 @@ function drawLegend(selection, data, config) {
 
 function drawItems(selection, data, config) {
     let SYMBOL_TRIANGLE = d3.symbol().type(d3.symbolTriangle);
-    let ranges = d3.range(0.25, 1.25, 0.25);
 
     let points = data.items.map((p, idx, arr) => {
         let rStart = config.radiusMin - Math.random() * 100;
         let rEnd = config.radiusMaxLine - config.buffer;
-        let rPos = config.radiusMaxLine - config.statuses[p.status] * (config.radiusMaxLine - config.radiusMin - config.buffer); //config.radiusMax - 100 * ranges[Math.ceil(d3.randomUniform(3)())];
+        let rPos = config.radiusMaxLine - config.statuses[p.status] * (config.radiusMaxLine - config.radiusMin - config.buffer);
 
         let angle = config.scaleRadialPositionWithBaseShift(p._pos);
         let origin = [rStart * Math.cos(angle), rStart * Math.sin(angle)];
@@ -430,7 +372,7 @@ function drawItems(selection, data, config) {
         let historyLine = null;
         let historyDirection = 0;
         if (!!p.history && p.history.length > 0) {
-            let hPos = config.radiusMaxLine - config.statuses[p.history[0].status] * (config.radiusMaxLine - config.radiusMin - config.buffer); //config.radiusMax - 100 * ranges[Math.ceil(d3.randomUniform(3)())];
+            let hPos = config.radiusMaxLine - config.statuses[p.history[0].status] * (config.radiusMaxLine - config.radiusMin - config.buffer);
 
             historyLine = [
                 [rPos * Math.cos(angle), rPos * Math.sin(angle)],
@@ -512,7 +454,6 @@ function processData(rawData) {
     let data = {
         areas: {}
     };
-    // rawData.blips = rawData.blips.forEach(b => b.section = b.section.trim())
 
     data.items = [ // blips
         ...(rawData.blips || []).map(blip => {
@@ -535,52 +476,10 @@ function processData(rawData) {
             if (d.state === "NEW") {
                 d._isNew = true;
             }
-//             /** MAKE FAKE HISTORY HERE **/
-//             if (idx % 3 === 0 && !d._isNew) {
-
-//                 switch (d.status) {
-//                     case 'Adopt':
-//                         d.history = [
-//                             {
-//                                 action: 'CHANGE_STATUS',
-//                                 status: Math.random() < 0.5 ? 'Assess' : 'Trial',
-//                             }
-//                         ];
-//                         break;
-//                     case 'Assess':
-//                         d.history = [
-//                             {
-//                                 action: 'CHANGE_STATUS',
-//                                 status: Math.random() < 0.5 ? 'Hold' : 'Trial'
-//                             }
-//                         ];
-//                         break;
-//                     case 'Trial':
-//                         d.history = [
-//                             {
-//                                 action: 'CHANGE_STATUS',
-//                                 status: 'Hold'
-//                             }
-//                         ];
-//                         break;
-//                     case 'Hold':
-//                         d.history = [
-//                             {
-//                                 action: 'CHANGE_STATUS',
-//                                 status: 'Trial'
-//                             }
-//                         ];
-//                         break;
-//                 }
-
-
-//             }
 
             return d;
         });
 
-    // rawData.sections.map(s => s.name.trim());
-    // areas.sort((a, b) => a.name < b.name);
     let areas =
         data.items // == sections
             .map(item => item.section.trim())
@@ -595,11 +494,9 @@ function processData(rawData) {
         }
     });
 
-    return data;
-}
+    data.statuses = rawData.statuses;
 
-function getData() {
-    return fetch(URL).then(response => response.json()).catch(m => console.log(m));
+    return data;
 }
 
 // --- helpers
@@ -625,7 +522,7 @@ function deg2rad(deg) {
     return deg * (PI / 180);
 }
 
-function getConfig(containerEl, items, clickHandler) {
+function getConfig(containerEl, items, statusesNames, clickHandler) {
     const width = 1000;
     const height = 1000;
     const legendReserverAngle = 12;
@@ -644,12 +541,19 @@ function getConfig(containerEl, items, clickHandler) {
         lineLight: '#c2c2c2'
     };
 
-    const statuses = {
-        'Hold': 0.25 - 0.25 / 2,
-        'Trial': 0.50 - 0.25 / 2,
-        'Assess': 0.75 - 0.25 / 2,
-        'Adopt': 1 - 0.25 / 2
-    };
+    if (!statusesNames) {
+        console.warn('Statuses are not definded!');
+        return false;
+    }
+
+    // Map statuses to their position
+    let statuses = {};
+    let r = 1 / statusesNames.length;
+    for(statusIdx in statusesNames.reverse()) {
+        let statusName = statusesNames[statusIdx].name
+        statuses[statusName] = r - (1 / statusesNames.length)/2;
+        r= r + 1 / statusesNames.length;
+    }
 
     console.log('statuses', statuses);
 
