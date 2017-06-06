@@ -143,8 +143,8 @@ function drawAreaLebels(selection, data, config) {
         .attr('id', (d, idx) => 'areaLabelPath_' + idx)
         .attr('class', 'areaLabelArc')
         .attr('d', (d, idx) => {
-            let angleStart = d.startAngle - config.baseAngle - 0.5;
-            let angleEnd = d.endAngle - config.baseAngle + 0.5;
+            let angleStart = d.startAngle - config.baseAngle;
+            let angleEnd = d.endAngle - config.baseAngle;
             let angleMid = (d.startAngle + d.endAngle) / 2;
 
             let pStart = [labelRadius * Math.cos(angleStart), labelRadius * Math.sin(angleStart)];
@@ -346,7 +346,7 @@ function drawLegend(selection, data, config) {
         .enter()
         .append('text')
         .attr('class', (d, idx) => 'legendLabel')
-        .attr('x', 10)
+        .attr('x', 0)
         .attr('dy', 8)
         .attr('text-anchor', 'left')
         .append('textPath')
