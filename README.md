@@ -27,7 +27,7 @@ it is `11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc`
 ### Backend
 - repository (Java)   
 https://bitbucket.pgs-soft.com/projects/PNP/repos/techradar-backend/browse  
-- parser (Spreadsheet > JSON)   
-http://pgslnx232.pgs-soft.com:8090/api  
+- Backend (Spreadsheet based)   
+https://techradar-api.pgs-soft.com/api
 - API contract (Raml)  
 https://bitbucket.pgs-soft.com/projects/PFP/repos/pgs-technology-radar-api/browse/api.raml  
