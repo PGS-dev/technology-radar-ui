@@ -733,7 +733,6 @@ function endAll(transition, callback) {
         });
 }
 
-function magicInit(data, clickHandler) {
-
+function chartInit(data, clickHandler) {
     drawChart(processData(data), clickHandler);
 }

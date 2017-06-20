@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import MagicChart from "./MagicChart";
-
-import { dataService } from './DataService';
+import Chart from "../Chart/Chart";
+import { dataService } from '../../services/DataService/DataService';
 
 class RadarChart extends Component {
     constructor(props) {
@@ -41,7 +40,7 @@ class RadarChart extends Component {
         return (
             <div>
                 {this.state.loading ? '' :
-                    <MagicChart data={this.state.data} onItemClick={this.props.onItemClick}/>}
+                    <Chart data={this.state.data} onItemClick={this.props.onItemClick}/>}
             </div>
         );
     }

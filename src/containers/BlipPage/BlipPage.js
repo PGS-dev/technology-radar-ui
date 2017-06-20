@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-
-import { dataService } from './DataService';
-import BlipHistory from './BlipHistory';
-
-import './Blip.css';
+import { dataService } from '../../services/DataService/DataService';
+import BlipHistory from '../../components/BlipHistory/BlipHistory';
+import './BlipPage.css';
 
 class Blip extends Component {
     constructor(props) {

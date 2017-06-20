@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import './App.css';
 import { BrowserRouter as Router, Switch, Route  } from 'react-router-dom';
-
-import Blip from './Blip';
-import Radar from './Radar';
-import NavBar from "./navbar/NavBar";
-import RadarNav from "./navbar/RadarNav";
-import Home from "./Home";
+import './App.css';
+import Blip from '../BlipPage/BlipPage';
+import Radar from '../RadarPage/RadarPage';
+import Home from "../HomePage/HomePage";
+import NavBar from "../../components/NavBar/NavBar";
+import RadarNav from "../../components/NavBar/RadarNav";
 
 const PageNotFound = ({match}) => (
     <div>

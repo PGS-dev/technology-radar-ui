@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import './Chart.css';
 
-import './MagicChart.css';
-
-class MagicChart extends Component {
+class Chart extends Component {
     componentDidMount() {
-        window.magicInit(this.props.data, this.props.onItemClick);
+        window.chartInit(this.props.data, this.props.onItemClick);
     }
 
     render() {
@@ -25,4 +24,4 @@ class MagicChart extends Component {
     }
 }
 
-export default MagicChart;
+export default Chart;
