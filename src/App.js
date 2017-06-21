@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Switch, Route  } from 'react-router-dom';
 import Blip from './Blip';
 import Radar from './Radar';
 import NavBar from "./navbar/NavBar";
-import RadarNav from "./navbar/RadarNav";
 import Home from "./Home";
 
 const PageNotFound = ({match}) => (
