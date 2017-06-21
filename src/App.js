@@ -12,17 +12,14 @@ const PageNotFound = ({match}) => (
     <div>
         <h3>Not found {JSON.stringify(match)}</h3>
     </div>
-)
+) 
 
 class App extends Component {
   render() {
     return (
         <Router basename="/technology-radar-ui">
             <div>
-                <NavBar>
-                    <Route path="/:spreadsheetId" component={RadarNav} />
-                </NavBar>
-
+                <NavBar />
                 <div className="content">
                     <Switch>
                         {/* order of Routes is meaningful */}

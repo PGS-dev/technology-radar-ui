@@ -1,19 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-const RadarNav = ({match}) => {
 
-    const routesArray = [['11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc', 'Frontend Radar'],
-    ['18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg', 'Example Radar']];
+const RadarNav = ({...props}) => {
 
-    function checkUrl(match, routesArray) {
-          const routeName = routesArray.find(route => (match.url.indexOf(route[0])!==-1));
-          return routeName ? routeName[1] : 'Tech Radar';
-    }
-    const navHomeLink = checkUrl(match, routesArray);
- 
+    let routeName = '';
+    if (props.radars.length > 0) {
+         routeName = props.radars.find(route => (props.match.url.indexOf(route.id)!==-1)).name;
+    } 
+
     return (
     <span>
-        <Link to={{pathname: `/`}}>{navHomeLink}</Link>
+        <Link to={{pathname: `/`}}>{routeName}</Link>
         {/*<Link to={{pathname: `/${match.params.spreadsheetId}/blips`}}>All blips</Link>*/}
     </span>
     )
