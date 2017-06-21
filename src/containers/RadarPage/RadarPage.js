@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-
-import Snapshots from './Snapshots';
-import RadarChart from './RadarChart';
-
-import { dataService } from './DataService';
-
-import './Radar.css';
+import Snapshots from '../../components/Snapshots/Snapshots';
+import RadarChart from '../../components/RadarChart/RadarChart';
+import { dataService } from '../../services/DataService/DataService';
+import './RadarPage.css';
 
 class Radar extends Component {
     constructor(props) {

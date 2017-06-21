@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import './App.css';
 import { BrowserRouter as Router, Switch, Route  } from 'react-router-dom';
-
-import Blip from './Blip';
-import Radar from './Radar';
-import NavBar from "./navbar/NavBar";
-import Home from "./Home";
+import './App.css';
+import Blip from '../BlipPage/BlipPage';
+import Radar from '../RadarPage/RadarPage';
+import Home from "../HomePage/HomePage";
+import NavBar from "../../components/NavBar/NavBar";
 
 const PageNotFound = ({match}) => (
     <div>
         <h3>Not found {JSON.stringify(match)}</h3>
     </div>
-) 
+)
 
 class App extends Component {
   render() {

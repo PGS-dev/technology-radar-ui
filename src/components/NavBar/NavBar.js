@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import { dataService } from '../DataService';
 import './NavBar.css';
-import { Route } from 'react-router-dom';
+
 import RadarNav from "./RadarNav";
 
 class NavBar extends Component {
@@ -14,7 +15,7 @@ class NavBar extends Component {
 
     componentDidMount(){
        dataService.getRadars()
-       .then(radars => { 
+       .then(radars => {
            this.setState({radars});
         })
     }
@@ -25,7 +26,7 @@ class NavBar extends Component {
             <Route path="/:spreadsheetId" render = {(props) => <RadarNav radars={this.state.radars} {...props} />} />
         </nav>
         );
-    } 
+    }
 }
 
 export default NavBar;

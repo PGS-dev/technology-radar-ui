@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './BlipHistory.css';
 
 const BlipHistory = ({ history }) => (

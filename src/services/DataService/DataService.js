@@ -1,4 +1,4 @@
-import Properties from './Properties'
+import Properties from '../../properties'
 
 class DataService {
     getSnapshots(spreadsheetId) {
