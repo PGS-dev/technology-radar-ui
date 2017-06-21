@@ -5,7 +5,8 @@ const RadarNav = ({...props}) => {
 
     let routeName = '';
     if (props.radars.length > 0) {
-         routeName = props.radars.find(route => (props.match.url.indexOf(route.id)!==-1)).name;
+        const validRadar = props.radars.find(route => (props.match.url.indexOf(route.id)!==-1));
+        routeName = validRadar ?  validRadar.name : "Tech radar PGS";
     } 
 
     return (
