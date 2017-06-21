@@ -14,6 +14,12 @@ class DataService {
             .catch(m => console.log(m))
     }
 
+    getRadars() {
+        return fetch(`${process.env.PUBLIC_URL}/radars.json`)
+        .then(response => response.json())
+        .catch(m => console.log(m))
+    }
+
     getBlip(spreadsheetId, blipId) {
         const url = `${Properties.BACKEND_URL}/${spreadsheetId}/blips/${blipId}`;
         return fetch(url)

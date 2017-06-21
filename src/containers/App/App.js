@@ -5,7 +5,6 @@ import Blip from '../BlipPage/BlipPage';
 import Radar from '../RadarPage/RadarPage';
 import Home from "../HomePage/HomePage";
 import NavBar from "../../components/NavBar/NavBar";
-import RadarNav from "../../components/NavBar/RadarNav";
 
 const PageNotFound = ({match}) => (
     <div>
@@ -18,10 +17,7 @@ class App extends Component {
     return (
         <Router basename="/technology-radar-ui">
             <div>
-                <NavBar>
-                    <Route path="/:spreadsheetId" component={RadarNav} />
-                </NavBar>
-
+                <NavBar />
                 <div className="content">
                     <Switch>
                         {/* order of Routes is meaningful */}
