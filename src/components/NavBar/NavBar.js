@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import { dataService } from '../DataService';
+import { dataService } from '../../services/DataService/DataService';
 import './NavBar.css';
 
 import RadarNav from "./RadarNav";
