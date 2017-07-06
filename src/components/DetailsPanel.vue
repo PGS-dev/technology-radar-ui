@@ -1,24 +1,33 @@
 <template>
   <section v-bind:class="{ 'is-open': isOpen}">
-    isOpen: {{isOpen}}
     <article>
-      {{description}}
+      <header>{{name}}</header>
+      <div>{{section}}</div>
+      <p>{{description}}</p>
     </article>
-    <button @click="togglePanel"> << </button>
+    <div>
+      <ul>
+        <li v-for="change in history">{{change}}</li>
+      </ul>
+    </div>
+    <button @click="togglePanel"> <<</button>
   </section>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-
   const panelName = 'detailsPanel'
 
   export default {
     name: panelName,
-    computed: mapState({
-      isOpen: state => state[panelName].isOpen,
-      description: state => state[panelName].description
-    }),
+    props: [
+      'isOpen',
+      'name',
+      'status',
+      'previousStatus',
+      'section',
+      'description',
+      'history'
+    ],
     methods: {
       togglePanel: function () {
         this.$store.dispatch('togglePanel', panelName)

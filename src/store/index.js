@@ -11,11 +11,7 @@ Vue.use(Vuex)
 // initial state
 const state = {
   snapshotsPanel: {
-    isOpen: false,
-    snapshots: [
-      'Snappy 1',
-      'Snappy 2'
-    ]
+    isOpen: false
   },
   detailsPanel: {
     isOpen: false

@@ -1,29 +1,27 @@
 <template>
-  <section>
-    isOpen: {{isOpen}}
+  <section v-bind:class="{ 'is-open': isOpen}">
+    <p v-if="isLoading">Loading ...</p>
     <nav>
       <ul>
-        <li v-for="snap in snapshotsCollection">
-          <a href="">{{snap}}</a>
+        <li v-for="snapshot in snapshots">
+          <a href="">{{snapshot.name}}</a>
         </li>
       </ul>
     </nav>
     <button @click="togglePanel">Toggle</button>
   </section>
-
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-
   const panelName = 'snapshotsPanel'
 
   export default {
     name: panelName,
-    computed: mapState({
-      isOpen: state => state[panelName].isOpen,
-      snapshotsCollection: state => []
-    }),
+    props: [
+      'isOpen',
+      'isLoading',
+      'snapshots'
+    ],
     methods: {
       togglePanel: function () {
         this.$store.dispatch('togglePanel', panelName)
@@ -39,5 +37,10 @@
     left: 0;
     background: rgba(0, 0, 0, 0.3);
     padding: 30px;
+  }
+
+  section.is-open {
+    background: red;
+    transform: translateX(0);
   }
 </style>
