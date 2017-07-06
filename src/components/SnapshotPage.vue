@@ -1,7 +1,7 @@
 <template>
 
   <section>
-    <h2>{{spreadsheetId}} / {{snapshotId}}</h2>
+    <h2>{{snapshotId}}</h2>
     <p v-if="currentSnapshot.blips">Blips: {{currentSnapshot.blips.length}}</p>
 
     <blips-table v-if="currentSnapshot.blips" :blips="currentSnapshot.blips"></blips-table>

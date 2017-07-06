@@ -3,14 +3,16 @@
     <p v-if="isLoading">Loading ...</p>
     <p v-if="snapshots === false">Cannot load snapshots :(</p>
     <nav>
-      <ul>
-        <li v-for="snapshot in snapshots">
-          <!--<a href="">{{snapshot.name}}</a>-->
-          <router-link :to="`/${spreadsheetId}/${snapshot.name}`">{{snapshot.name}}</router-link>
-        </li>
-      </ul>
+      <router-link
+        v-for="snapshot in snapshots"
+        :key="snapshot.name"
+        :to="`/${spreadsheetId}/${snapshot.name}`"
+        tag="md-button">
+        {{snapshot.name}}
+      </router-link>
     </nav>
-    <button @click="togglePanel">Toggle</button>
+
+    <!--<md-button @click="togglePanel">Toggle</md-button>-->
   </section>
 </template>
 
@@ -38,42 +40,8 @@
 </script>
 
 <style scoped>
-  section {
-    position: relative;
+  nav {
+    text-align: center;
   }
 
-  section.is-open {
-    opacity: 0.5;
-  }
-
-  ul,li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-  }
-
-  a {
-    text-decoration: none;
-    display: inline-block;
-    padding: 10px;
-    color: #333;
-    transition: background 0.4s;
-  }
-
-  a:hover, a.router-link-active {
-    background: #333;
-    color: white;
-  }
-
-
-
-  button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
 </style>

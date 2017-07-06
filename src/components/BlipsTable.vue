@@ -1,23 +1,26 @@
 <template>
-  <table>
-    <thead>
-    <th>Name</th>
-    <th>Section</th>
-    <th>Status</th>
-    <th>Prev Status</th>
-    <th>State</th>
-    </thead>
+  <md-table>
+    <md-table-header>
+      <md-table-row>
+        <md-table-head>Name</md-table-head>
+        <md-table-head>Section</md-table-head>
+        <md-table-head>Status</md-table-head>
+        <md-table-head>Previous</md-table-head>
+        <md-table-head>State</md-table-head>
+      </md-table-row>
+    </md-table-header>
 
-    <tbody>
-    <tr v-for="blip in blips">
-      <td>{{blip.name}}</td>
-      <td>{{blip.section}}</td>
-      <td>{{blip.status}}</td>
-      <td>{{blip.previousStatus}}</td>
-      <td>{{blip.state}}</td>
-    </tr>
-    </tbody>
-  </table>
+    <md-table-body>
+      <md-table-row v-for="blip in blips" :key="blip.name">
+        <md-table-cell>{{blip.name}}</md-table-cell>
+        <md-table-cell>{{blip.section}}</md-table-cell>
+        <md-table-cell>{{blip.status}}</md-table-cell>
+        <md-table-cell>{{blip.previousStatus}}</md-table-cell>
+        <md-table-cell>{{blip.state}}</md-table-cell>
+      </md-table-row>
+    </md-table-body>
+  </md-table>
+
 </template>
 
 <script>
@@ -30,19 +33,4 @@
 </script>
 
 <style scoped>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th {
-    text-align: left;
-    background: darkgrey;
-    padding: 10px;
-  }
-
-  td {
-    border-bottom: solid 1px darkgrey;
-    padding: 10px;
-  }
 </style>

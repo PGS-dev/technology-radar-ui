@@ -1,7 +1,17 @@
 <template>
-  <header>
-    <router-link to="/">{{radarName}}</router-link>
-  </header>
+  <md-toolbar>
+    <!--<md-button class="md-icon-button">-->
+      <!--<md-icon>menu</md-icon>-->
+    <!--</md-button>-->
+
+    <router-link to="/" tag="h2" class="md-title" style="flex: 1">
+      {{radarName}}
+    </router-link>
+
+
+    <!--<md-button>Snapshots</md-button>-->
+    <!--<md-button>All blips</md-button>-->
+  </md-toolbar>
 </template>
 
 <script>
@@ -14,29 +24,7 @@
 </script>
 
 <style scoped>
-  header {
-    margin: 0;
-    height: 56px;
-    padding: 0 16px 0 24px;
-    background-color: #333;
-    color: #ffffff;
+  .md-title {
+    cursor: pointer;
   }
-
-  a {
-    display: block;
-    position: relative;
-    font-size: 20px;
-    line-height: 1;
-    letter-spacing: .02em;
-    font-weight: 400;
-    box-sizing: border-box;
-    padding-top: 16px;
-    color: white;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: orange;
-  }
-
 </style>
