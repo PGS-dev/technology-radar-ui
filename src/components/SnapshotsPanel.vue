@@ -11,8 +11,6 @@
         {{snapshot.name}}
       </router-link>
     </nav>
-
-    <!--<md-button @click="togglePanel">Toggle</md-button>-->
   </section>
 </template>
 
@@ -30,18 +28,18 @@
     ],
     computed: mapState({
       spreadsheetId: state => state.spreadsheetId
-    }),
-    methods: {
-      togglePanel: function () {
-        this.$store.dispatch('togglePanel', panelName)
-      }
-    }
+    })
   }
 </script>
 
 <style scoped>
-  nav {
+  section {
     text-align: center;
+    display: none;
+  }
+
+  section.is-open {
+    display: block;
   }
 
 </style>

@@ -16,7 +16,7 @@ const state = {
   },
   loaders: {},
   snapshotsPanel: {
-    isOpen: false
+    isOpen: true
   },
   detailsPanel: {
     isOpen: false

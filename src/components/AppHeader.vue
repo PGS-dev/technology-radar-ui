@@ -9,8 +9,7 @@
     </router-link>
 
 
-    <!--<md-button>Snapshots</md-button>-->
-    <!--<md-button>All blips</md-button>-->
+    <md-button @click="toggleSnapshotsPanel" >Toggle Snapshots</md-button>
   </md-toolbar>
 </template>
 
@@ -19,7 +18,12 @@
     name: 'appHeader',
     props: [
       'radarName'
-    ]
+    ],
+    methods: {
+      toggleSnapshotsPanel: function () {
+        this.$store.dispatch('togglePanel', 'snapshotsPanel')
+      }
+    }
   }
 </script>
 
