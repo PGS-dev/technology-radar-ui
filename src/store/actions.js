@@ -1,4 +1,9 @@
-import {getSnapshots} from '../services/snapshots'
+import {
+  fetchSnapshots,
+  fetchSnapshot,
+  fetchRadarDetails,
+  fetchAllBlips
+} from '../services/snapshots'
 
 export const openPanel = ({commit}, panelName) => {
   commit('OPEN_PANEL', {panelName})
@@ -12,28 +17,50 @@ export const togglePanel = ({commit}, panelName) => {
   commit('TOGGLE_PANEL', {panelName})
 }
 
-export const fetchSnapshots = ({commit}, spreadsheetId) => {
-  commit('FETCH_SNAPSHOTS')
+export const getRadarDetails = ({commit}, spreadsheetId) => {
+  commit('GET_RADAR_DETAILS_REQUEST')
 
-  return getSnapshots(spreadsheetId)
+  return fetchRadarDetails(spreadsheetId)
     .then((response) => {
-      commit('FETCH_SNAPSHOTS_SUCCESS', {response})
+      commit('GET_RADAR_DETAILS_SUCCESS', {response})
     })
-    .catch((error) => commit('FETCH_SNAPSHOTS_FAIL', {error: error.json()}))
+    .catch((error) => {
+      commit('GET_RADAR_DETAILS_FAIL', {error})
+    })
 }
-//
-// export const fetchBlips = ({commit}, {spreadsheetId, snapshotId}) => {
-//   const url = `${BACKEND_URL}/${spreadsheetId}/snapshots/${snapshotId}`
-//
-//   return fetch(url)
-//     .then((response) => commit('UPDATE_BLIPS', {response: response.json()}))
-//     .catch((error) => commit('FETCH_BLIPS_FAIL', {error: error.json()}))
-// }
-//
-// export const fetchBlip = ({commit}, {spreadsheetId, blipId}) => {
-//   const url = `${BACKEND_URL}/${spreadsheetId}/blips/${blipId}`
-//
-//   return fetch(url)
-//     .then((response) => commit('UPDATE_BLIP_DETAILS', {response: response.json()}))
-//     .catch((error) => commit('FETCH_BLIP_DETAILS_FAIL', {error: error.json()}))
-// }
+
+export const getSnapshots = ({commit}, spreadsheetId) => {
+  commit('GET_SNAPSHOTS_REQUEST')
+
+  return fetchSnapshots(spreadsheetId)
+    .then((response) => {
+      commit('GET_SNAPSHOTS_SUCCESS', {response})
+    })
+    .catch((error) => {
+      commit('GET_SNAPSHOTS_FAIL', {error})
+    })
+}
+
+export const getSnapshot = ({commit}, {spreadsheetId, snapshotId}) => {
+  commit('GET_SNAPSHOT_REQUEST')
+
+  return fetchSnapshot(spreadsheetId, snapshotId)
+    .then((response) => {
+      commit('GET_SNAPSHOT_SUCCESS', {response})
+    })
+    .catch((error) => {
+      commit('GET_SNAPSHOT_FAIL', {error})
+    })
+}
+
+export const getAllBlips = ({commit}, spreadsheetId) => {
+  commit('GET_BLIPS_REQUEST')
+
+  return fetchAllBlips(spreadsheetId)
+    .then((response) => {
+      commit('GET_BLIPS_SUCCESS', {response})
+    })
+    .catch((error) => {
+      commit('GET_BLIPS_FAIL', {error})
+    })
+}

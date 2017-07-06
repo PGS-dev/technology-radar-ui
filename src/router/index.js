@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Snapshot from '@/components/Snapshot'
+import SnapshotPage from '@/components/SnapshotPage'
+import HomePage from '@/components/HomePage'
 
 Vue.use(Router)
 
@@ -8,8 +9,14 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Snapshot',
-      component: Snapshot
+      name: 'HomePage',
+      component: HomePage
+    },
+    {
+      path: '/:spreadsheetId/:snapshotId',
+      name: 'SnapshotPage',
+      component: SnapshotPage,
+      props: true
     }
   ]
 })

@@ -1,27 +1,26 @@
 <template>
   <div id="app">
-    <app-header></app-header>
+    <app-header :radar-name="radarName"></app-header>
+    <aside>
+      <snapshots-panel
+        :snapshots="snapshots"
+        :is-loading="loaders.snapshots"
+        :is-open="snapshotsPanelProps.isOpen">
+      </snapshots-panel>
+    </aside>
     <main>
       <router-view></router-view>
     </main>
     <aside>
-      snapshots:{{snapshots}}
-      <snapshots-panel
-        v-bind:snapshots="snapshots"
-        v-bind:is-loading="snapshotsPanelProps.isLoading"
-        v-bind:is-open="snapshotsPanelProps.isOpen">
-      </snapshots-panel>
-    </aside>
-    <aside>
-      <details-panel
-        v-bind:is-open="detailsPanelProps.isOpen"
-        v-bind:name="'NAME'"
-        v-bind:section="'SECTION'"
-        v-bind:status="'STATUS'"
-        v-bind:previousStatus="'PREVSTATUS'"
-        v-bind:history="[{status: 'adopt'}]"
-        v-bind:description="'DESC'">
-      </details-panel>
+      <!--<details-panel-->
+        <!--:is-open="detailsPanelProps.isOpen"-->
+        <!--:name="'NAME'"-->
+        <!--:section="'SECTION'"-->
+        <!--:status="'STATUS'"-->
+        <!--:previousStatus="'PREVSTATUS'"-->
+        <!--:history="[{status: 'adopt'}]"-->
+        <!--:description="'DESC'">-->
+      <!--</details-panel>-->
     </aside>
   </div>
 </template>
@@ -32,7 +31,7 @@
   import SnapshotsPanel from '@/components/SnapshotsPanel'
   import DetailsPanel from '@/components/DetailsPanel'
 
-  const spreadsheetId = '11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc'
+  //  const spreadsheetId = '11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc'
 
   export default {
     name: 'app',
@@ -42,13 +41,17 @@
       DetailsPanel
     },
     computed: mapState({
+      spreadsheetId: state => state.spreadsheetId,
+      radarName: state => state.radarDetails.tittle,
+      loaders: state => state.loaders,
       snapshotsPanelProps: state => state.snapshotsPanel,
       detailsPanelProps: state => state.detailsPanel,
       snapshots: state => state.snapshots,
       blipDetails: state => state.blipDetails
     }),
     mounted: function () {
-      this.$store.dispatch('fetchSnapshots', spreadsheetId)
+      this.$store.dispatch('getRadarDetails', this.spreadsheetId)
+      this.$store.dispatch('getSnapshots', this.spreadsheetId)
     }
   }
 </script>

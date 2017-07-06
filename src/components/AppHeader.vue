@@ -1,17 +1,15 @@
 <template>
   <header>
-    <span>{{radarName}}</span>
+    <router-link to="/">{{radarName}}</router-link>
   </header>
 </template>
 
 <script>
   export default {
     name: 'appHeader',
-    data () {
-      return {
-        radarName: `Technology Radar`
-      }
-    }
+    props: [
+      'radarName'
+    ]
   }
 </script>
 
@@ -24,7 +22,7 @@
     color: #ffffff;
   }
 
-  header span {
+  a {
     display: block;
     position: relative;
     font-size: 20px;
@@ -33,5 +31,12 @@
     font-weight: 400;
     box-sizing: border-box;
     padding-top: 16px;
+    color: white;
+    text-decoration: none;
   }
+
+  a:hover {
+    color: orange;
+  }
+
 </style>

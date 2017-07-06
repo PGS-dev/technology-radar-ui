@@ -10,17 +10,20 @@ Vue.use(Vuex)
 
 // initial state
 const state = {
+  spreadsheetId: '11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc',
+  radarDetails: {
+    tittle: 'Technology Radar'
+  },
+  loaders: {},
   snapshotsPanel: {
     isOpen: false
   },
   detailsPanel: {
     isOpen: false
   },
-  snapshot: {
-    name: '',
-    blips: [],
-    sections: []
-  }
+  currentSnapshot: {},
+  snapshots: false,
+  allBlips: []
 }
 
 export default new Vuex.Store({

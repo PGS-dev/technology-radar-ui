@@ -1,3 +1,5 @@
+// Panels
+
 export const OPEN_PANEL = (state, {panelName}) => {
   state[panelName].isOpen = true
 }
@@ -10,11 +12,66 @@ export const TOGGLE_PANEL = (state, {panelName}) => {
   state[panelName].isOpen = !state[panelName].isOpen
 }
 
-export const FETCH_SNAPSHOTS = (state) => {
-  state.snapshotsPanel.isLoading = true
+// Radar details
+
+export const GET_RADAR_DETAILS_REQUEST = (state) => {
+  state.loaders.radarDetails = true
 }
 
-export const FETCH_SNAPSHOTS_SUCCESS = (state, {response}) => {
-  state.snapshotsPanel.isLoading = false
+export const GET_RADAR_DETAILS_SUCCESS = (state, {response}) => {
+  state.loaders.radarDetails = false
+  state.radarDetails = response
+}
+
+export const GET_RADAR_DETAILS_FAIL = (state, {response}) => {
+  state.loaders.radarDetails = false
+  state.radarDetails = false
+}
+
+// Snapshots
+
+export const GET_SNAPSHOTS_REQUEST = (state) => {
+  state.loaders.snapshots = true
+}
+
+export const GET_SNAPSHOTS_SUCCESS = (state, {response}) => {
+  state.loaders.snapshots = false
   state.snapshots = response
+}
+
+export const GET_SNAPSHOTS_FAIL = (state, {response}) => {
+  state.loaders.snapshots = false
+  state.snapshots = []
+}
+
+// All Blips
+
+export const GET_BLIPS_REQUEST = (state) => {
+  state.loaders.blips = true
+}
+
+export const GET_BLIPS_SUCCESS = (state, {response}) => {
+  state.loaders.blips = false
+  state.allBlips = response
+}
+
+export const GET_BLIPS_FAIL = (state, {response}) => {
+  state.loaders.blips = false
+  state.allBlips = false
+}
+
+// Snapshot
+
+export const GET_SNAPSHOT_REQUEST = (state) => {
+  state.loaders.snapshot = true
+}
+
+export const GET_SNAPSHOT_SUCCESS = (state, {response}) => {
+  state.loaders.snapshot = false
+  state.currentSnapshot = response
+}
+
+export const GET_SNAPSHOT_FAIL = (state, {response}) => {
+  state.loaders.snapshot = false
+  state.currentSnapshot = false
 }
