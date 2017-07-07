@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Technology Radar UI",
   "author": "Michal Hans (PGS Software) <mhans@pgs-soft.com>",
+  "homepage" : "http://PGS-dev.github.io/technology-radar-ui",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
