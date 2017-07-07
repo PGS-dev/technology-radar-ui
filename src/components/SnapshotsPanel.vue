@@ -1,5 +1,7 @@
 <template>
-  <section>
+  <md-sidenav class="md-left"
+              ref="leftSidenav"
+              :md-swipeable="isPanelSwipeable">
     <md-toolbar>
       <div class="md-toolbar-container">
         <h3 class="md-title">Snapshots</h3>
@@ -20,7 +22,7 @@
       </md-list>
 
     </nav>
-  </section>
+  </md-sidenav>
 </template>
 
 <script>
@@ -34,13 +36,24 @@
       'isLoading',
       'snapshots'
     ],
+    data: function () {
+      return {
+        isPanelSwipeable: true
+      }
+    },
     computed: mapState({
-      spreadsheetId: state => state.spreadsheetId
+      spreadsheetId: state => state.spreadsheetId,
+      snapshotsPanelIsOpen: state => state.snapshotsPanel.isOpen
     }),
     methods: {
       closePanel: function () {
         debugger
         this.$store.dispatch('closePanel', 'snapshotsPanel')
+      }
+    },
+    watch: {
+      snapshotsPanelIsOpen: function (newValue) {
+        this.$refs.leftSidenav.toggle()
       }
     }
   }
