@@ -1,15 +1,24 @@
 <template>
-  <section v-bind:class="{ 'is-open': isOpen}">
+  <section>
+    <md-toolbar>
+      <div class="md-toolbar-container">
+        <h3 class="md-title">Snapshots</h3>
+      </div>
+    </md-toolbar>
+
     <p v-if="isLoading">Loading ...</p>
     <p v-if="snapshots === false">Cannot load snapshots :(</p>
     <nav>
-      <router-link
-        v-for="snapshot in snapshots"
-        :key="snapshot.name"
-        :to="`/${spreadsheetId}/${snapshot.name}`"
-        tag="md-button">
-        {{snapshot.name}}
-      </router-link>
+      <md-list>
+        <router-link
+          v-for="snapshot in snapshots"
+          :key="snapshot.name"
+          :to="`/${spreadsheetId}/${snapshot.name}`"
+          tag="md-list-item">
+          {{snapshot.name}}
+        </router-link>
+      </md-list>
+
     </nav>
   </section>
 </template>
@@ -22,24 +31,20 @@
   export default {
     name: panelName,
     props: [
-      'isOpen',
       'isLoading',
       'snapshots'
     ],
     computed: mapState({
       spreadsheetId: state => state.spreadsheetId
-    })
+    }),
+    methods: {
+      closePanel: function () {
+        debugger
+        this.$store.dispatch('closePanel', 'snapshotsPanel')
+      }
+    }
   }
 </script>
 
 <style scoped>
-  section {
-    text-align: center;
-    display: none;
-  }
-
-  section.is-open {
-    display: block;
-  }
-
 </style>

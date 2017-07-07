@@ -1,15 +1,15 @@
 <template>
   <md-toolbar>
-    <!--<md-button class="md-icon-button">-->
-      <!--<md-icon>menu</md-icon>-->
-    <!--</md-button>-->
+    <md-button class="md-icon-button" @click="toggleSnapshotsPanel">
+      <md-icon>menu</md-icon>
+    </md-button>
 
     <router-link to="/" tag="h2" class="md-title" style="flex: 1">
       {{radarName}}
     </router-link>
 
 
-    <md-button @click="toggleSnapshotsPanel" >Toggle Snapshots</md-button>
+    <md-button @click="toggleSnapshotsPanel" >Snapshots</md-button>
   </md-toolbar>
 </template>
 
