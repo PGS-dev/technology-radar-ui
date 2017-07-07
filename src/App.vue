@@ -63,10 +63,6 @@
     /*overflow: hidden;*/
   }
 
-  main {
-    padding: 0 10px;
-  }
-
   app-header {
     position: fixed;
   }

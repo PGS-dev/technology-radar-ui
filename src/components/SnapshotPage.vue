@@ -1,13 +1,18 @@
 <template>
-
   <section>
-    <h2>{{snapshotId}}</h2>
-    <p v-if="currentSnapshot.blips">Blips: {{currentSnapshot.blips.length}}</p>
+    <md-tabs md-fixed class="md-transparent">
+      <md-tab id="table" md-label="Table">
+        <h2>{{snapshotId}}</h2>
+        <p v-if="currentSnapshot.blips">Blips: {{currentSnapshot.blips.length}}</p>
+        <blips-table v-if="currentSnapshot.blips" :blips="currentSnapshot.blips"></blips-table>
+      </md-tab>
 
-    <blips-table v-if="currentSnapshot.blips" :blips="currentSnapshot.blips"></blips-table>
-
+      <md-tab id="chart" md-label="Chart">
+        <h2>{{snapshotId}}</h2>
+        [CHART]
+      </md-tab>
+    </md-tabs>
   </section>
-
 </template>
 
 <script>

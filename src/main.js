@@ -13,10 +13,14 @@ Vue.use(VueResource)
 Vue.use(VueMaterial)
 
 Vue.material.registerTheme('default', {
-  primary: 'orange',
+  primary: {
+    color: 'orange',
+    hue: 700,
+    textColor: 'white'
+  },
   accent: 'red',
   warn: 'red',
-  background: 'grey'
+  background: 'white'
 })
 
 /* eslint-disable no-new */
