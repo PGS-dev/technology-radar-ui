@@ -75,3 +75,19 @@ export const GET_SNAPSHOT_FAIL = (state, {response}) => {
   state.loaders.snapshot = false
   state.currentSnapshot = false
 }
+
+// Blip details
+
+export const GET_BLIP_REQUEST = (state) => {
+  state.loaders.blip = true
+}
+
+export const GET_BLIP_SUCCESS = (state, {response}) => {
+  state.loaders.blip = false
+  state.blipDetails = response
+}
+
+export const GET_BLIP_FAIL = (state, {response}) => {
+  state.loaders.blips = false
+  state.blipDetails = false
+}

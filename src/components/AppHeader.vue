@@ -5,7 +5,7 @@
     </md-button>
 
     <router-link :to="`/${spreadsheetId}`" tag="h2" class="md-title" style="flex: 1">
-      {{radarName}}
+      {{radarName}} <span class="snapshotName" v-if="snapshotId"> / {{snapshotId}}</span>
     </router-link>
 
     <md-button v-if="spreadsheetId" @click="toggleSnapshotsPanel" >Snapshots</md-button>
@@ -17,7 +17,8 @@
     name: 'appHeader',
     props: [
       'radarName',
-      'spreadsheetId'
+      'spreadsheetId',
+      'snapshotId'
     ],
     methods: {
       toggleSnapshotsPanel: function () {
@@ -30,5 +31,9 @@
 <style scoped>
   .md-title {
     cursor: pointer;
+  }
+
+  .snapshotName {
+    /*font-size: 80%;*/
   }
 </style>

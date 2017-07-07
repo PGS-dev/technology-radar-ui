@@ -2,7 +2,8 @@ import {
   fetchSnapshots,
   fetchSnapshot,
   fetchRadarDetails,
-  fetchAllBlips
+  fetchAllBlips,
+  fetchBlipDetails
 } from '../services/snapshots'
 
 export const setSpreadsheetId = ({commit}, spreadsheetId) => {
@@ -66,5 +67,17 @@ export const getAllBlips = ({commit}, spreadsheetId) => {
     })
     .catch((error) => {
       commit('GET_BLIPS_FAIL', {error})
+    })
+}
+
+export const getBlipDetails = ({commit}, {spreadsheetId, blipId}) => {
+  commit('GET_BLIP_REQUEST')
+
+  return fetchBlipDetails(spreadsheetId, blipId)
+    .then((response) => {
+      commit('GET_BLIP_SUCCESS', {response})
+    })
+    .catch((error) => {
+      commit('GET_BLIP_FAIL', {error})
     })
 }

@@ -2,7 +2,8 @@
   <div id="app">
     <app-header
       :radar-name="radarName"
-      :spreadsheet-id="spreadsheetId">
+      :spreadsheet-id="spreadsheetId"
+      :snapshot-id="snapshotId">
     </app-header>
     <div>
       <aside>
@@ -47,13 +48,26 @@
     },
     computed: mapState({
       spreadsheetId: state => state.route.params.spreadsheetId,
+      snapshotId: state => state.route.params.snapshotId,
       radarName: state => state.radarDetails.tittle,
       loaders: state => state.loaders,
 //      snapshotsPanelProps: state => state.snapshotsPanel,
 //      detailsPanelProps: state => state.detailsPanel,
       snapshots: state => state.snapshots,
       blipDetails: state => state.blipDetails
-    })
+    }),
+    mounted: function () {
+      if (this.spreadsheetId) {
+        this.$store.dispatch('getRadarDetails', this.spreadsheetId)
+        this.$store.dispatch('getSnapshots', this.spreadsheetId)
+      }
+    },
+    watch: {
+      spreadsheetId: function (newValue) {
+        this.$store.dispatch('getRadarDetails', newValue)
+        this.$store.dispatch('getSnapshots', newValue)
+      }
+    }
   }
 </script>
 

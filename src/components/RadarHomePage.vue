@@ -25,11 +25,7 @@
     computed: mapState({
       snapshots: state => state.snapshots,
       radarName: state => state.radarDetails.tittle
-    }),
-    mounted: function () {
-      this.$store.dispatch('getRadarDetails', this.spreadsheetId)
-      this.$store.dispatch('getSnapshots', this.spreadsheetId)
-    }
+    })
   }
 </script>
 

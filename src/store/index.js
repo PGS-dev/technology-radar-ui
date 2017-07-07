@@ -15,6 +15,7 @@ const state = {
     tittle: 'Technology Radar'
   },
   loaders: {},
+  blipDetails: {},
   snapshotsPanel: {
     isOpen: true
   },
