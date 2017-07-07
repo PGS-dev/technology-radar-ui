@@ -5,6 +5,10 @@ import {
   fetchAllBlips
 } from '../services/snapshots'
 
+export const setSpreadsheetId = ({commit}, spreadsheetId) => {
+  commit('SET_SPREADSHEET_ID', {spreadsheetId})
+}
+
 export const openPanel = ({commit}, panelName) => {
   commit('OPEN_PANEL', {panelName})
 }

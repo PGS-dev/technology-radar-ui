@@ -34,7 +34,8 @@
     name: panelName,
     props: [
       'isLoading',
-      'snapshots'
+      'snapshots',
+      'spreadsheetId'
     ],
     data: function () {
       return {
@@ -42,12 +43,10 @@
       }
     },
     computed: mapState({
-      spreadsheetId: state => state.spreadsheetId,
       snapshotsPanelIsOpen: state => state.snapshotsPanel.isOpen
     }),
     methods: {
       closePanel: function () {
-        debugger
         this.$store.dispatch('closePanel', 'snapshotsPanel')
       }
     },

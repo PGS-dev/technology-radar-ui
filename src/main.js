@@ -6,11 +6,13 @@ import VueMaterial from 'vue-material'
 import App from './App'
 import router from './router'
 import store from './store'
+import { sync } from 'vuex-router-sync'
 
 Vue.config.productionTip = false
 
 Vue.use(VueResource)
 Vue.use(VueMaterial)
+sync(store, router)
 
 Vue.material.registerTheme('default', {
   primary: {

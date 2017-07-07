@@ -1,9 +1,14 @@
 <template>
   <div id="app">
-    <app-header :radar-name="radarName"></app-header>
+    <app-header
+      :radar-name="radarName"
+      :spreadsheet-id="spreadsheetId">
+    </app-header>
     <div>
       <aside>
         <snapshots-panel
+          v-if="spreadsheetId"
+          :spreadsheet-id="spreadsheetId"
           :snapshots="snapshots"
           :is-loading="loaders.snapshots">
         </snapshots-panel>
@@ -41,18 +46,14 @@
       DetailsPanel
     },
     computed: mapState({
-      spreadsheetId: state => state.spreadsheetId,
+      spreadsheetId: state => state.route.params.spreadsheetId,
       radarName: state => state.radarDetails.tittle,
       loaders: state => state.loaders,
 //      snapshotsPanelProps: state => state.snapshotsPanel,
 //      detailsPanelProps: state => state.detailsPanel,
       snapshots: state => state.snapshots,
       blipDetails: state => state.blipDetails
-    }),
-    mounted: function () {
-      this.$store.dispatch('getRadarDetails', this.spreadsheetId)
-      this.$store.dispatch('getSnapshots', this.spreadsheetId)
-    }
+    })
   }
 </script>
 
