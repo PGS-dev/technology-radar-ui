@@ -8,6 +8,8 @@ import BlipPage from '@/components/BlipPage'
 Vue.use(Router)
 
 export default new Router({
+  base: '/technology-radar-ui',
+  mode: 'history',
   routes: [
     {
       path: '/',
