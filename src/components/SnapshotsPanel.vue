@@ -59,5 +59,8 @@
   }
 </script>
 
-<style scoped>
+<style >
+  .md-sidenav.md-active .md-sidenav-backdrop {
+    opacity: 0;
+  }
 </style>
