@@ -10,11 +10,12 @@ Vue.use(Vuex)
 
 // initial state
 const state = {
-  spreadsheetId: false,
+  spreadsheetId: null,
   radarDetails: {
     tittle: 'Technology Radar'
   },
   loaders: {},
+  loadersBlip: null,
   blipDetails: {},
   snapshotsPanel: {
     isOpen: true
@@ -23,7 +24,7 @@ const state = {
     isOpen: false
   },
   currentSnapshot: {},
-  snapshots: false,
+  snapshots: null,
   allBlips: []
 }
 

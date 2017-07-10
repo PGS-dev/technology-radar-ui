@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <md-whiteframe class="tableContainer" v-if="blips">
     <md-table>
       <md-table-header>
         <md-table-row>
@@ -21,7 +21,7 @@
         </md-table-row>
       </md-table-body>
     </md-table>
-  </div>
+  </md-whiteframe>
 </template>
 
 <script>
@@ -35,8 +35,13 @@
 </script>
 
 <style scoped>
-  .md-table {
+  .tableContainer {
+    background: rgba(255,255,255, 0.2);
     max-width: 900px;
     margin: 0 auto;
+  }
+
+  .tableContainer .md-table tbody .md-table-row {
+    border-top-color: rgba(255,255,255,0.1)
   }
 </style>

@@ -76,6 +76,12 @@
   body {
     height: 100%;
     /*overflow: hidden;*/
+    color: #333;
+  }
+
+  #app {
+    min-height: 100%;
+    background: linear-gradient(to bottom, #ff8008, #ffc837); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */;
   }
 
   app-header {

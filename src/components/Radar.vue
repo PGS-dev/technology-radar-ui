@@ -1,5 +1,5 @@
 <template>
-    <svg id="radar" class="scaling-svg" viewBox="0 0 1000 1000"></svg>
+  <svg id="radar" class="scaling-svg" viewBox="0 0 1000 1000"></svg>
 </template>
 
 <script>
@@ -8,21 +8,33 @@
   export default {
     name: 'radar',
     props: [
-      'radarData'
+      'radarData',
+      'spreadsheetId'
     ],
     data () {
       return {}
     },
+    methods: {
+      onBlipClick: function (blip) {
+        const spreadsheetId = this.spreadsheetId
+        const blipId = blip.name
+        this.$router.push({
+          name: 'BlipPage',
+          params: {
+            spreadsheetId: spreadsheetId,
+            blipId: blipId
+          }
+        })
+      }
+    },
     mounted: function () {
-      const clickHandler = {}
-      let radar = new Chart(this.$el, this.radarData, clickHandler)
+      let radar = new Chart(this.$el, this.radarData, this.onBlipClick)
       console.log(radar)
     },
     watch: {
       radarData: function () {
-        const clickHandler = {}
         this.$el.innerHTML = ''
-        let radar = new Chart(this.$el, this.radarData, clickHandler)
+        let radar = new Chart(this.$el, this.radarData, this.onBlipClick)
         console.log(radar)
       }
     }
@@ -55,21 +67,33 @@
 
   .itemLabel {
     cursor: pointer;
+    fill: #333;
   }
 
   .areaFill {
     opacity: 0.5;
   }
 
-  .legendLabel{
-    fill: white;
-  }
-
-  .legendArcBg {
-    fill: #F57C00;
+  .areaLabel {
+    fill: rgba(255, 255, 255, 0.7);
   }
 
   .areaLabelArc {
     fill: none;
   }
+
+  .legendLabel {
+    fill: #333;
+  }
+
+  .legendArcBg {
+    /*fill: red;*/
+    fill: transparent;
+  }
+
+  .legendArcOuter {
+    fill: rgba(255, 255, 255, 0.2);
+  }
+
+
 </style>

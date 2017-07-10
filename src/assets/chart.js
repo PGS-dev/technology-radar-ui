@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as d3 from 'd3'
 
-const AREA_COLORS = ['#5BC0EB', '#7FB800', '#FFB30F', '#FD151B'];
+const AREA_COLORS = ['#537D8D', '#4FB286', '#918B76', '#595959'];
 const HISTORY_COLOR = '#7a7a7a';
 const PI = 3.14159;
 
@@ -64,47 +64,41 @@ class Chart {
     let group = selection.select('g.areaLabels').empty() ? selection.append('g') : selection.select('g.areaLabels');
 
     let areasData = Object.keys(data.areas)
-        .map(area => Object.assign(data.areas[area], {
-            name: area
-          })
-        )
-        .map((area, idx, arr) => {
-          area.startAngle = config.scaleRadialPosition(arr.reduce((total, curr, idxArea) => {
-              return idxArea < idx ? total + (curr.count) : total;
+      .map(area => Object.assign(data.areas[area], {
+        name: area
+      }))
+      .map((area, idx, arr) => {
+        area.startAngle = config.scaleRadialPosition(arr.reduce((total, curr, idxArea) => {
+            return idxArea < idx ? total + (curr.count) : total;
+          },
+          0
+        ))
+        ;
+
+        area.endAngle = config.scaleRadialPosition(arr.reduce((total, curr, idxArea) => {
+              return idxArea < idx ? total + curr.count : total;
             },
-            0
-          ))
-          ;
-
-          area.endAngle = config.scaleRadialPosition(arr.reduce((total, curr, idxArea) => {
-                return idxArea < idx ? total + curr.count : total;
-              },
-              -1
-            )
-            + area.count
+            -1
           )
-          ;
+          + area.count
+        )
+        ;
 
-          return area;
-        })
-      ;
+        return area;
+      });
 
     let arc = d3.arc()
-        .innerRadius(config.radiusMin - 23)
-        .outerRadius(config.radiusMin - 20)
-        .startAngle(d => d.startAngle
-        )
-        .endAngle(d => d.endAngle
-        )
-      ;
+      .innerRadius(config.radiusMin - 23)
+      .outerRadius(config.radiusMin - 20)
+      .startAngle(d => d.startAngle)
+      .endAngle(d => d.endAngle);
 
     group.selectAll('.areaLine')
       .data(areasData)
       .enter()
       .append('path')
       .attr('class', 'areaLine')
-      .attr('fill', d => d.color
-      )
+      .attr('fill', d => d.color)
       .attr('d', arc)
 
     let labelRadius = config.radiusMin - 21.5;
@@ -179,7 +173,7 @@ class Chart {
       .data(tagsData)
       .enter()
       .insert('path')
-      .attr('fill', '#FFFFFF')
+      .attr('fill', d => d.color)
       .attr('stroke', d => d.color)
       .attr('stroke-width', 3)
       .attr('class', 'areaLabelTag')
@@ -192,7 +186,7 @@ class Chart {
         let p6 = [labelRadius * Math.cos(d.midAngle - config.baseAngle - d.offsetAngle - d.offsetSide), labelRadius * Math.sin(d.midAngle - config.baseAngle - d.offsetAngle - d.offsetSide)];
 
         return `
-        M ${p1[0]}, ${p1[1]} A ${labelTagRadiusMax}, ${labelTagRadiusMax} 0 0 1 ${p2[0]}, ${p2[1]} L ${p3[0]}, ${p3[1]} L ${p4[0]}, ${p4[1]} A ${labelTagRadiusMin}, ${labelTagRadiusMin} 0 0 0 ${p5[0]}, 
+        M ${p1[0]}, ${p1[1]} A ${labelTagRadiusMax}, ${labelTagRadiusMax} 0 0 1 ${p2[0]}, ${p2[1]} L ${p3[0]}, ${p3[1]} L ${p4[0]}, ${p4[1]} A ${labelTagRadiusMin}, ${labelTagRadiusMin} 0 0 0 ${p5[0]},
 ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       })
     ;
@@ -203,17 +197,14 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .data(areasData)
       .enter()
       .append('text')
-      .attr('class', (d, idx) => 'areaLabel ' + '#areaLabel_' + idx
-      )
+      .attr('class', (d, idx) => 'areaLabel ' + '#areaLabel_' + idx)
       .attr('x', 0)
       .attr('dy', 5)
       .attr('text-anchor', 'middle')
       .append('textPath')
-      .attr('xlink:href', (d, idx) => '#areaLabelPath_' + idx
-      )
+      .attr('xlink:href', (d, idx) => '#areaLabelPath_' + idx)
       .attr('startOffset', '50%')
-      .text((d) => d.name
-      )
+      .text((d) => d.name)
     ;
   }
 
@@ -229,11 +220,8 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       ;
 
     let lineFn = d3.line()
-        .x(d => d[0]
-        )
-        .y(d => d[1]
-        )
-      ;
+      .x(d => d[0])
+      .y(d => d[1]);
 
     group.selectAll('.itemLine')
       .data(linesData)
@@ -254,14 +242,12 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
   drawLegend(selection, data, config) {
 
     let statuses = Object.keys(config.statuses).map((val, idx) => {
-        return {
-          idx,
-          name: val,
-          step: config.statuses[val]
-        }
+      return {
+        idx,
+        name: val,
+        step: config.statuses[val]
       }
-      )
-      ;
+    });
 
     let arcBg = function (d) {
       let r = config.radiusMaxLine - (d.step + 0.25 / 2) * (config.radiusMaxLine - config.radiusMin - config.buffer);
@@ -270,8 +256,8 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
         .innerRadius(r + 2)
         .outerRadius(r2 - 2)
         .cornerRadius(10)
-        .startAngle(-(2 * PI - config.angleEnd) + config.angleStep / 2)
-        .endAngle(config.angleStart + config.angleStep)();
+        .startAngle(-(2 * PI - config.angleEnd) - config.angleStep/2)
+        .endAngle(config.angleStart - config.angleStep/2)();
     };
 
     let arcInner = function (d) {
@@ -279,8 +265,8 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       return d3.arc()
         .innerRadius(r)
         .outerRadius(r + 1)
-        .startAngle(-(2 * PI - config.angleEnd) + config.angleStep)
-        .endAngle(config.angleStart - config.angleStep)();
+        .startAngle((2 * PI - config.angleEnd) - config.angleStep)
+        .endAngle(config.angleStart)();
     };
 
     let arcOuter = function (d) {
@@ -290,8 +276,8 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
         .innerRadius(r + 2)
         .outerRadius(r2 - 2)
         .cornerRadius(10)
-        .startAngle(config.angleStart - config.angleStep)
-        .endAngle(config.angleEnd)();
+        .startAngle(config.angleStart - config.angleStep/2)
+        .endAngle(config.angleEnd - config.angleStep/2)();
     };
 
     selection.selectAll('.legendArcBg')
@@ -299,10 +285,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .enter()
       .append('path')
       .attr('class', 'legendArcBg')
-      .attr('fill', 'url(#MyGradient)')
-      .attr('d', d => arcBg(d)
-      )
-    ;
+      .attr('d', d => arcBg(d));
 
     selection.selectAll('.legendArcOuter')
       .data(statuses)
@@ -311,9 +294,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .attr('class', 'legendArcOuter')
       .attr('fill', '#f7f7f7')
       .attr('d', d => arcOuter(d)
-      )
-    ;
-
+      );
 
     selection.selectAll('.legendArcInnerPath')
       .data(statuses)
@@ -334,17 +315,14 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .data(statuses)
       .enter()
       .append('text')
-      .attr('class', (d, idx) => 'legendLabel'
-      )
+      .attr('class', (d, idx) => 'legendLabel')
       .attr('x', 0)
       .attr('dy', 8)
       .attr('text-anchor', 'left')
       .append('textPath')
-      .attr('xlink:href', (d, idx) => '#legendArcInnerPath_' + idx
-      )
+      .attr('xlink:href', (d, idx) => '#legendArcInnerPath_' + idx)
       .attr('startOffset', '0%')
-      .text((d) => d.name
-      )
+      .text((d) => d.name)
     ;
 
   }
@@ -396,10 +374,8 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
     });
 
     let lineHistory = d3.line()
-        .x(d => d[0]
-        )
-        .y(d => d[1]
-        )
+        .x(d => d[0])
+        .y(d => d[1])
       ;
 
     //draw item history line
@@ -419,12 +395,11 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
     ;
 
     selection.selectAll('.itemOld')
-      .data(points.filter(d => !d.isNew)
-      )
+      .data(points.filter(d => !d.isNew))
       .enter()
       .append('circle')
       .attr('class', 'item itemOld')
-      .attr('fill', '#ffffff')
+      .attr('fill', 'transparent')
       .attr('stroke', d => d.color)
       .attr('stroke-width', 1.5)
       .attr('cx', d => d.origin[0])
@@ -441,15 +416,11 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .attr('fill', 'none')
       .attr('stroke', 'none')
       .attr('stroke-width', 1.5)
-      .attr('d', SYMBOL_TRIANGLE.size(30))
-      .attr('transform', d => {
-          return `translate(${d.pos[0]}, ${d.pos[1]}) rotate(${this.rad2deg(d.angle) - 90})`
-        }
-      )
+      .attr('d', SYMBOL_TRIANGLE.size(40))
+      .attr('transform', d => `translate(${d.pos[0]}, ${d.pos[1]}) rotate(${this.rad2deg(d.angle) - 90})`)
       .transition()
-      .delay((d, idx) => idx * 100
-      )
-      .attr('fill', '#ffffff')
+      .delay((d, idx) => idx * 100)
+      .attr('fill', 'transparent')
       .attr('stroke', d => data.areas[d.section].color
       )
   }
@@ -529,7 +500,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
   getConfig(containerEl, items, statusesNames, clickHandler) {
     const width = 1000;
     const height = 1000;
-    const legendReserverAngle = 12;
+    const legendReserverAngle = 10;
     const baseAngle = PI / 2;
 
     const count = items.length;
@@ -576,9 +547,10 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
     const radiusMin = 200;
 
     // --- angles calculcation with reserved space
-    const angleStart = this.deg2rad(legendReserverAngle * 2);
-    const angleEnd = this.deg2rad(360); // 2 * PI === 360
+    const angleStart = this.deg2rad(legendReserverAngle + legendReserverAngle/2);
+    const angleEnd = this.deg2rad(360 - legendReserverAngle + legendReserverAngle/2); // 2 * PI === 360
     const angleStep = (angleEnd - angleStart) / items.length;
+    const reservedAngle = this.deg2rad(legendReserverAngle);
     // const angleStep = (PI * 2) / items.length;// (angleEnd - angleStart) / items.length;
 
     const scaleRadialPosition = d3.scaleLinear()
