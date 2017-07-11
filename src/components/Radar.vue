@@ -51,7 +51,8 @@
   }
 
   .scaling-svg {
-    max-height: 80vh;
+    max-height: 85vh;
+    margin-top: -16px;
   }
 
   .itemLabel, .legendLabel, .areaLabel {
