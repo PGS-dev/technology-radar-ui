@@ -33,7 +33,9 @@
 <style scoped>
   h1 {
     text-align: center;
-    margin-top: 50px;
+    margin: 100px 0;
+    font-weight: 100;
+    font-size: 50px;
   }
 
   .snapshots {

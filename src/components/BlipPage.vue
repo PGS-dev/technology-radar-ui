@@ -1,32 +1,24 @@
 <template>
   <section>
-    <h1>{{blipId}}</h1>
+    <h1 class="name">{{blipId}}</h1>
 
     <md-spinner v-if="loader && !blipDetails" md-indeterminate></md-spinner>
 
     <div v-if="blipDetails && !loader">
-      <h3>Section: {{blipDetails.section}}</h3>
-      <h4>Current status: {{blipDetails.status}}</h4>
+      <h3 class="section">{{blipDetails.section}}</h3>
+      <h4 class="status">{{blipDetails.status}}</h4>
 
-      <div class="tableContainer">
-        <md-table v-if="blipDetails.history">
-          <md-table-header>
-            <md-table-row>
-              <md-table-head>New status</md-table-head>
-              <md-table-head>Old status</md-table-head>
-              <md-table-head>Snapshot</md-table-head>
-            </md-table-row>
-          </md-table-header>
-          <md-table-body>
-            <md-table-row v-for="(change, idx) in blipDetails.history" :key="idx">
-              <md-table-cell>{{change.newStatus}}</md-table-cell>
-              <md-table-cell>{{change.oldStatus}}</md-table-cell>
-              <md-table-cell>
-                <router-link :to="`/${spreadsheetId}/${change.snapshotName}`">{{change.snapshotName}}</router-link>
-              </md-table-cell>
-            </md-table-row>
-          </md-table-body>
-        </md-table>
+      <p class="description" v-if="blipDetails.description">{{blipDetails.description}}</p>
+
+      <div class="history" v-if="blipDetails.history">
+        <ul>
+          <li v-for="(change, idx) in blipDetails.history" :key="idx">
+            <router-link :to="`/${spreadsheetId}/${change.snapshotName}`" class="history-link">
+              <span class="history-status">{{change.newStatus}}</span>
+              <span class="history-snapshot">{{change.snapshotName}}</span>
+            </router-link>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -60,6 +52,34 @@
     padding: 30px;
   }
 
+  .name {
+    text-align: center;
+    font-weight: 100;
+    font-size: 50px;
+    margin-bottom: 0;
+  }
+
+  .section {
+    text-align: center;
+    font-weight: 100;
+    font-size: 30px;
+
+  }
+
+  .status {
+    text-align: center;
+    font-weight: 100;
+    font-size: 40px;
+    color: #F57C00;
+    margin: 50px 0;
+  }
+
+  .description {
+    text-align: center;
+    max-width: 600px;
+    margin: 0px auto 30px;
+  }
+
   .md-spinner {
     position: fixed;
     left: 50%;
@@ -68,13 +88,53 @@
     margin-top: -25px;
   }
 
-  .tableContainer {
-    background: rgba(255, 255, 255, 0.2);
-    max-width: 600px;
+  .history {
+    max-width: 300px;
     margin: 0 auto;
   }
 
-  .tableContainer .md-table tbody .md-table-row {
-    border-top-color: rgba(255, 255, 255, 0.1)
+  .history ul {
+    list-style: none;
+    border-left: solid 2px white;
+    margin: 0;
+    padding: 0 0 0 10px;
+  }
+
+  .history li::before {
+    content: " ";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: solid 2px white;
+    background: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    transform: translateX(-16px) translateY(-10px);
+  }
+
+  .history-link {
+    background: rgba(255,255,255, 0.5);
+    padding: 15px 20px;
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    width: 250px;
+    border-radius: 5px;
+  }
+
+  .history .history-link:hover {
+    text-decoration: none;
+    background: rgba(255,255,255, 1);
+  }
+
+  .history-status {
+    display: block;
+    font-size: 20px;
+    text-decoration: none;
+  }
+
+  .history-snapshot {
+    display: block;
+    text-decoration: none;
   }
 </style>

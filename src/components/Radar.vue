@@ -92,7 +92,7 @@
   }
 
   .legendArcOuter {
-    fill: rgba(255, 255, 255, 0.2);
+    fill: rgba(255, 255, 255, 0.5);
   }
 
 

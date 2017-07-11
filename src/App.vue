@@ -81,7 +81,7 @@
 
   #app {
     min-height: 100%;
-    background: linear-gradient(to bottom, #ff8008, #ffc837); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   }
 
   app-header {

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <md-tabs md-fixed class="">
+    <md-tabs md-fixed class="md-transparent">
       <md-tab id="chart" md-label="Chart">
         <radar v-if="currentSnapshot && currentSnapshot.blips"
                :radar-data="currentSnapshot"

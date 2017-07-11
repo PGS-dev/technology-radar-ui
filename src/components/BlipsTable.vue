@@ -36,7 +36,7 @@
 
 <style scoped>
   .tableContainer {
-    background: rgba(255,255,255, 0.2);
+    background: rgba(255,255,255, 0.5);
     max-width: 900px;
     margin: 0 auto;
   }
