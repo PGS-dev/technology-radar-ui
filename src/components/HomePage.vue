@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Visualise Your Technology Radar</h1>
+    <h1>Visualize Your Technology Radar</h1>
 
     <div class="u-center">
       <form novalidate @submit.stop.prevent="submit">
