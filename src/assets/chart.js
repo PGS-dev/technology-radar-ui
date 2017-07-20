@@ -11,11 +11,12 @@ import {
 
 import {
   deg2rad,
-  rad2deg,
-  pointCircle,
-  interpolate,
-  rotate,
+  endAll,
   getTextLength,
+  interpolate,
+  pointCircle,
+  rad2deg,
+  rotate,
 } from '../common/geometry';
 
 
@@ -33,18 +34,7 @@ class Chart {
     };
   }
 
-  /* -- DRAWING functions */
-  drawChart() {
-    this.group = svg.append('g')
-      .attr('transform', `translate(${config.center.x}, ${config.center.y})`);
-
-    this.drawLegend(this.group, data, config);
-    this.drawItemsLines(this.group, data, config);
-    this.drawItemLabels(this.group, data.items, config);
-    this.drawAreaLebels(this.group, data, config);
-    this.drawItems(this.group, data, config);
-  }
-
+  /* --- DRAWING functions */
   drawDebugLayer() {
     console.warn('--- DEBUG LAYER ---');
 
@@ -186,7 +176,176 @@ class Chart {
       .text((d) => d.name);
   }
 
-  // --- data functions
+  drawItemsLines() {
+
+  }
+
+  drawItems() {
+    let lineHistory = d3.line()
+        .x(d => d[0])
+        .y(d => d[1]);
+
+    const points = this.data.items.map((p, idx, points) => {
+
+      const angle = this.config.scaleRadialPositionShifted(p._pos);
+      const radiusStart = this.config.radiusMin - Math.random() * 100;
+      const radiusEnd = this.config.radiusMaxPadding - this.config.statuses[p.status] * (this.config.radiusMaxPadding - this.config.radiusMin);
+
+
+      const isNew = p._isNew;
+      const color = this.data.areas[p.section].color;
+
+      let positionStart = pointCircle(radiusStart, angle);
+      let positionEnd = pointCircle(radiusEnd, angle);
+      let positionMax = pointCircle(this.config.radiusMaxPadding, angle);
+
+      let pathHistory = null;
+      let pathHistoryDirection = 0;
+
+      if (!!p.history && p.history.length > 0) {
+        positionMax = pointCircle(this.config.radiusMaxPadding - this.config.statuses[p.history[0].status] * (this.config.radiusMaxPadding - this.config.radiusMin), angle);
+        pathHistory = [positionEnd, positionMax];
+      }
+
+      const pathPoints = [positionStart, positionMax];
+
+      return {
+        angle,
+        color,
+        isNew,
+        pathPoints,
+        pathHistory,
+        pathHistoryDirection,
+        positionStart,
+        positionEnd,
+      }
+    });
+
+    /* --- draw old items history lines --- */
+    this.group.append('g').classed('Items--historyLines', true).selectAll('.Items--historyLine')
+      .data(points.filter(d => !!d.pathHistory))
+      .enter()
+      .append('path')
+      .attr('class', 'Items--historyLine')
+      .attr('fill', 'none')
+      .attr('stroke', d => d.pathHistoryDirection === 1 ? d.color : HISTORY_COLOR)
+      .attr('stroke-width', 1.5)
+      .attr('stroke-dasharray', '2 3')
+      .attr('d', d => lineHistory(d.pathHistory));
+
+    /* --- draw old items --- */
+    this.group.append('g').classed('Items--old', true).selectAll('.itemOld')
+      .data(points.filter(d => !d.isNew))
+      .enter()
+      .append('circle')
+      .attr('class', 'Item Item--old')
+      .attr('fill', 'transparent')
+      .attr('stroke', d => d.color)
+      .attr('stroke-width', 1.5)
+      .attr('cx', d => d.positionStart[0])
+      .attr('cy', d => d.positionStart[1])
+      .attr('r', 4)
+      .call(this.animateItems);
+
+  }
+
+  animateItems(selection) {
+    selection.transition()
+      .duration(1500)
+      .ease(d3.easeBounceOut)
+      .attrTween('transform', (d) => interpolate(d.pathPoints))
+      .call(endAll, function () {
+        selection.transition()
+          .duration(1500)
+          .ease(d3.easeCubicIn)
+          .attr('transform', p => `translate(${p.positionEnd[0] - p.positionStart[0]}, ${p.positionEnd[1] - p.positionStart[1]})`);
+      });
+  }
+
+  /*
+      this.group.append('g').classed('Items--new', true).selectAll('.itemNew')
+        .data(points.filter(d => d.isNew))
+        .enter()
+        .append('path')
+        .attr('class', 'item itemNew')
+        .attr('fill', 'none')
+        .attr('stroke', 'none')
+        .attr('stroke-width', 1.5)
+        .attr('d', SYMBOL_TRIANGLE.size(40))
+        .attr('transform', d => `translate(${d.pos[0]}, ${d.pos[1]}) rotate(${this.rad2deg(d.angle) - 90})`)
+        .transition()
+        .delay((d, idx) => idx * 100)
+        .attr('fill', 'transparent')
+        .attr('stroke', d => data.areas[d.section].color);*/
+
+  /*
+  let _self = this;
+  let SYMBOL_TRIANGLE = d3.symbol().type(d3.symbolTriangle);
+  let points = data.items.map((p, idx, arr) => {
+    let rStart = config.radiusMin - Math.random() * 100;
+    let rEnd = config.radiusMaxLine - config.buffer;
+    let rPos = config.radiusMaxLine - config.statuses[p.status] * (config.radiusMaxLine - config.radiusMin - config.buffer);
+
+    let angle = config.scaleRadialPositionWithBaseShift(p._pos);
+    let origin = [rStart * Math.cos(angle), rStart * Math.sin(angle)];
+    let destination = [rEnd * Math.cos(angle), rEnd * Math.sin(angle)];
+    let pos = [rPos * Math.cos(angle), rPos * Math.sin(angle)];
+
+    let historyLine = null;
+    let historyDirection = 0;
+    if (!!p.history && p.history.length > 0) {
+      let hPos = config.radiusMaxLine - config.statuses[p.history[0].status] * (config.radiusMaxLine - config.radiusMin - config.buffer);
+
+      historyLine = [
+        [rPos * Math.cos(angle), rPos * Math.sin(angle)],
+        [hPos * Math.cos(angle), hPos * Math.sin(angle)]
+      ];
+
+      origin = historyLine[0];
+      destination = historyLine[1];
+      historyDirection = hPos < rPos ? -1 : 1;
+    }
+
+    let path = !!p.history ? [origin, destination] : this.createJaggedPoints(origin, destination, 15, 30);
+    let color = data.areas[p.section].color;
+    let isNew = p._isNew;
+
+    return {
+      angle,
+      isNew,
+      destination,
+      origin,
+      pos,
+      historyLine,
+      historyDirection,
+      path,
+      color,
+      section: p.section
+    }
+  });
+
+  let lineHistory = d3.line()
+      .x(d => d[0])
+      .y(d => d[1])
+    ;
+
+  //draw item history line
+  selection.selectAll('.itemHistoryLine')
+    .data(points.filter(d => !!d.historyLine)
+    )
+    .enter()
+    .append('path')
+    .attr('class', 'itemHistoryLine')
+    .attr('fill', 'none')
+    .attr('stroke', d => d.historyDirection === 1 ? d.color : HISTORY_COLOR
+    )
+    .attr('stroke-width', 1.5)
+    .attr('stroke-dasharray', '2 3')
+    .attr('d', d => lineHistory(d.historyLine)
+    )
+  ; }*/
+
+  /* ---  data functions --- */
   processData(rawData) {
     let data = {
       areas: {}
@@ -234,11 +393,9 @@ class Chart {
     return data;
   }
 
-  // --- helpers
-
-
+  /* --- prepare configuration --- */
   getConfig() {
-    /* --- local pointers */
+    /* --- local pointers --- */
     const containerEl = this.svg;
     const items = this.data.items;
 
@@ -312,7 +469,9 @@ class Chart {
       .attr('transform', `translate(${this.config.center.x}, ${this.config.center.y})`);
 
     this.drawLegend();
-    // this.drawItemsLines(this.group, this.data, this.config);
+    this.drawItemsLines();
+    this.drawItems();
+
     // this.drawItemLabels(this.group, this.data.items, this.config);
     // this.drawAreaLebels(this.group, this.data, this.config);
     // this.drawItems(this.group, this.data, this.config);

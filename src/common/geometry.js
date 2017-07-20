@@ -52,3 +52,15 @@ export function interpolate (points) {
     return `translate(${mid[0] - points[0][0]}, ${mid[1] - points[0][1]})`
   }
 }
+
+export function endAll (transition, callback) {
+  if (transition.size() === 0) {
+    callback()
+  }
+  let n = 0
+  transition.each(function () {
+    ++n
+  }).on('end', function () {
+    if (!--n) callback.apply(this, arguments)
+  })
+}
