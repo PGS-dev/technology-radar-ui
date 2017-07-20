@@ -2,11 +2,13 @@
 import * as d3 from 'd3'
 
 import {
+  NEW_ITEM_DELAY,
+  NEW_ITEM_SIZE,
   PI,
   WIDTH,
   HEIGHT,
-  AREA_COLORS,
-  HISTORY_COLOR,
+  PALETTE,
+  SYMBOL_TRIANGLE,
 } from './chart.const';
 
 import {
@@ -177,13 +179,37 @@ class Chart {
   }
 
   drawItemsLines() {
+    let line = d3.line()
+      .x(d => d[0])
+      .y(d => d[1]);
 
+    const lines = this.data.items.map(p => {
+      const angle = this.config.scaleRadialPositionShifted(p._pos);
+      return [
+        pointCircle(this.config.radiusMin, angle),
+        pointCircle(this.config.radiusMaxPadding, angle),
+      ];
+    });
+
+    this.group.append('g').classed('ItemLines', true).selectAll('.ItemLine')
+      .data(lines)
+      .enter()
+      .append('path')
+      .attr('class', 'itemLine')
+      .attr('fill', 'none')
+      .attr('stroke', 'none')
+      .attr('stroke-width', 0.5)
+      .attr('stroke-dasharray', '3 5')
+      .attr('d', line)
+      .transition()
+      .delay((d, idx) => idx * 10)
+      .attr('stroke', PALETTE.itemLine);
   }
 
   drawItems() {
     let lineHistory = d3.line()
-        .x(d => d[0])
-        .y(d => d[1]);
+      .x(d => d[0])
+      .y(d => d[1]);
 
     const points = this.data.items.map((p, idx, points) => {
 
@@ -217,7 +243,7 @@ class Chart {
         pathHistory,
         pathHistoryDirection,
         positionStart,
-        positionEnd,
+        positionEnd
       }
     });
 
@@ -228,7 +254,7 @@ class Chart {
       .append('path')
       .attr('class', 'Items--historyLine')
       .attr('fill', 'none')
-      .attr('stroke', d => d.pathHistoryDirection === 1 ? d.color : HISTORY_COLOR)
+      .attr('stroke', d => d.pathHistoryDirection === 1 ? d.color : PALETTE.historyLine)
       .attr('stroke-width', 1.5)
       .attr('stroke-dasharray', '2 3')
       .attr('d', d => lineHistory(d.pathHistory));
@@ -247,6 +273,23 @@ class Chart {
       .attr('r', 4)
       .call(this.animateItems);
 
+    console.log(this.data.areas)
+
+    /** --- draw new items --- */
+    this.group.append('g').classed('Items--new', true).selectAll('.itemNew')
+      .data(points.filter(d => d.isNew))
+      .enter()
+      .append('path')
+      .attr('class', 'item itemNew')
+      .attr('fill', 'none')
+      .attr('stroke', 'none')
+      .attr('stroke-width', 1.5)
+      .attr('d', SYMBOL_TRIANGLE.size(NEW_ITEM_SIZE))
+      .attr('transform', d => `translate(${d.positionEnd[0]}, ${d.positionEnd[1]}) rotate(${rad2deg(d.angle) - 60})`)
+      .transition()
+      .delay((d, idx) => idx * NEW_ITEM_DELAY)
+      .attr('fill', 'transparent')
+      .attr('stroke', d => d.color);
   }
 
   animateItems(selection) {
@@ -261,89 +304,6 @@ class Chart {
           .attr('transform', p => `translate(${p.positionEnd[0] - p.positionStart[0]}, ${p.positionEnd[1] - p.positionStart[1]})`);
       });
   }
-
-  /*
-      this.group.append('g').classed('Items--new', true).selectAll('.itemNew')
-        .data(points.filter(d => d.isNew))
-        .enter()
-        .append('path')
-        .attr('class', 'item itemNew')
-        .attr('fill', 'none')
-        .attr('stroke', 'none')
-        .attr('stroke-width', 1.5)
-        .attr('d', SYMBOL_TRIANGLE.size(40))
-        .attr('transform', d => `translate(${d.pos[0]}, ${d.pos[1]}) rotate(${this.rad2deg(d.angle) - 90})`)
-        .transition()
-        .delay((d, idx) => idx * 100)
-        .attr('fill', 'transparent')
-        .attr('stroke', d => data.areas[d.section].color);*/
-
-  /*
-  let _self = this;
-  let SYMBOL_TRIANGLE = d3.symbol().type(d3.symbolTriangle);
-  let points = data.items.map((p, idx, arr) => {
-    let rStart = config.radiusMin - Math.random() * 100;
-    let rEnd = config.radiusMaxLine - config.buffer;
-    let rPos = config.radiusMaxLine - config.statuses[p.status] * (config.radiusMaxLine - config.radiusMin - config.buffer);
-
-    let angle = config.scaleRadialPositionWithBaseShift(p._pos);
-    let origin = [rStart * Math.cos(angle), rStart * Math.sin(angle)];
-    let destination = [rEnd * Math.cos(angle), rEnd * Math.sin(angle)];
-    let pos = [rPos * Math.cos(angle), rPos * Math.sin(angle)];
-
-    let historyLine = null;
-    let historyDirection = 0;
-    if (!!p.history && p.history.length > 0) {
-      let hPos = config.radiusMaxLine - config.statuses[p.history[0].status] * (config.radiusMaxLine - config.radiusMin - config.buffer);
-
-      historyLine = [
-        [rPos * Math.cos(angle), rPos * Math.sin(angle)],
-        [hPos * Math.cos(angle), hPos * Math.sin(angle)]
-      ];
-
-      origin = historyLine[0];
-      destination = historyLine[1];
-      historyDirection = hPos < rPos ? -1 : 1;
-    }
-
-    let path = !!p.history ? [origin, destination] : this.createJaggedPoints(origin, destination, 15, 30);
-    let color = data.areas[p.section].color;
-    let isNew = p._isNew;
-
-    return {
-      angle,
-      isNew,
-      destination,
-      origin,
-      pos,
-      historyLine,
-      historyDirection,
-      path,
-      color,
-      section: p.section
-    }
-  });
-
-  let lineHistory = d3.line()
-      .x(d => d[0])
-      .y(d => d[1])
-    ;
-
-  //draw item history line
-  selection.selectAll('.itemHistoryLine')
-    .data(points.filter(d => !!d.historyLine)
-    )
-    .enter()
-    .append('path')
-    .attr('class', 'itemHistoryLine')
-    .attr('fill', 'none')
-    .attr('stroke', d => d.historyDirection === 1 ? d.color : HISTORY_COLOR
-    )
-    .attr('stroke-width', 1.5)
-    .attr('stroke-dasharray', '2 3')
-    .attr('d', d => lineHistory(d.historyLine)
-    )
-  ; }*/
 
   /* ---  data functions --- */
   processData(rawData) {
@@ -383,7 +343,7 @@ class Chart {
     areas.forEach((area, idx) => {
       data.areas[area] = {
         idx,
-        color: AREA_COLORS[idx],
+        color: PALETTE.areas[idx],
         count: data.items.filter(item => item.section === area).length
       }
     });
