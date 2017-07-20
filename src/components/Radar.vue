@@ -105,17 +105,28 @@
     fill: rgba(255, 255, 255, 0.5);
   }
 
-  .RadarChart.debug {
-    // Legend-background
-    .legendArcOuter {
-      // fill: rgba(255, 0, 128, 0.5);
+  .RadarChart.debug {    
+    .Legend-background {
+        stroke: magenta;
+    }
+    .Legend-arcOuter {
       stroke: cyan;
     }
-    .legendArcBg {
-      stroke: magenta;
+    .Legend-innerPath {
+      stroke: deeppink;
     }
-    .legendArcInnerPath {
-      stroke: red;
+
+  }
+
+  .RadarChar-debug {
+    stroke: red;
+
+    .cyan {
+      stroke: cyan;
+    }
+
+    .angleStep {
+      stroke: blue;
     }
   }
 
