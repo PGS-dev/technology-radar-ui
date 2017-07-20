@@ -47,6 +47,7 @@
       }
     }
   }
+
 </script>
 
 <style lang="scss">
@@ -63,20 +64,13 @@
     margin-top: -16px;
   }
 
-  .itemLabel, .legendLabel, .areaLabel {
+  .itemLabel,
+  .legendLabel,
+  .areaLabel {
     font-family: 'Oswald', sans-serif;
     opacity: 1;
     transform-origin: top right;
     -moz-transform-origin: 0 0;
-  }
-
-  .itemLabel:hover {
-    font-weight: bold;
-  }
-
-  .itemLabel {
-    cursor: pointer;
-    fill: #333;
   }
 
   .areaFill {
@@ -85,10 +79,6 @@
 
   .areaLabel {
     fill: rgba(255, 255, 255, 0.7);
-  }
-
-  .areaLabelArc {
-    fill: none;
   }
 
   .legendLabel {
@@ -105,9 +95,31 @@
     fill: rgba(255, 255, 255, 0.5);
   }
 
-  .RadarChart.debug {    
+  .RadarChart {
+    .ItemLabel {
+      cursor: pointer;
+      fill: #333;
+    }
+    
+    .ItemLabel:hover {
+      font-weight: bold;
+    }
+    
+    .Section--labelArc {
+      fill: none;
+      // stroke: red;
+      // stroke-dasharray: 5 5;
+      // stroke-width: 5;
+    }
+
+    .areaLabel {
+      fill: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  .RadarChart.debug {
     .Legend-background {
-        stroke: magenta;
+      stroke: magenta;
     }
     .Legend-arcOuter {
       stroke: cyan;
@@ -115,7 +127,6 @@
     .Legend-innerPath {
       stroke: deeppink;
     }
-
   }
 
   .RadarChar-debug {
@@ -129,7 +140,5 @@
       stroke: blue;
     }
   }
-
-
 
 </style>

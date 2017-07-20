@@ -19,11 +19,12 @@ import {
   pointCircle,
   rad2deg,
   rotate,
+  textPercentWidth,
 } from '../common/geometry';
 
 
 class Chart {
-  constructor(el, data, clickHandler, options) {
+  constructor(el, data, onClick, options) {
     console.clear();
 
     this.svg = d3.select(el);
@@ -32,7 +33,7 @@ class Chart {
     this.data = this.processData(data);
     this.config = this.getConfig();
     this.events = {
-      click: clickHandler
+      onClick
     };
   }
 
@@ -273,8 +274,6 @@ class Chart {
       .attr('r', 4)
       .call(this.animateItems);
 
-    console.log(this.data.areas)
-
     /** --- draw new items --- */
     this.group.append('g').classed('Items--new', true).selectAll('.itemNew')
       .data(points.filter(d => d.isNew))
@@ -290,6 +289,168 @@ class Chart {
       .delay((d, idx) => idx * NEW_ITEM_DELAY)
       .attr('fill', 'transparent')
       .attr('stroke', d => d.color);
+  }
+
+  drawItemLabels() {
+    let arcLabel = d3.arc()
+      .outerRadius(this.config.radiusMax)
+      .innerRadius(this.config.radiusMax)
+      .startAngle(d => this.config.scaleRadialPositionShifted(d))
+      .endAngle(d => this.config.scaleRadialPositionShifted(d));
+
+    this.group.append('g').classed('ItemsLabels', true).selectAll('.ItemLabel')
+      .data(this.data.items)
+      .enter()
+      .append('text')
+      .attr('class', 'ItemLabel')
+      .attr('alignment-baseline', 'middle')
+      .attr('transform', (d, idx) => {
+        const midAngle = this.config.scaleRadialPositionShifted(idx);
+        return `translate(${arcLabel.centroid(idx)[0]}, ${arcLabel.centroid(idx)[1]}) rotate(${rad2deg(midAngle) - 90}) rotate(${midAngle > PI ? -180 : 0})`;
+      })
+      .attr('text-anchor', (d, idx) => {
+        return this.config.scaleRadialPositionShifted(idx) <= PI ? 'start' : 'end';
+      })
+      .on('click', this.events.onClick)
+      .text(d => `${!!d._isNew ? '* ' : ''} ${d.name}`);
+  }
+
+  drawAreaLebels() {
+    const group = this.group.append('g').classed('Sections', true);
+    
+    let areasData = Object.keys(this.data.areas)
+      .map(area => Object.assign(this.data.areas[area], {
+        name: area
+      }))
+      .map((area, idx, arr) => {
+        area.startAngle = this.config.scaleRadialPositionShifted(arr.reduce((total, curr, idxArea) => {
+            return idxArea < idx ? total + (curr.count) : total;
+          }, 0));
+
+        area.endAngle = this.config.scaleRadialPositionShifted(arr.reduce((total, curr, idxArea) => {
+            return idxArea < idx ? total + curr.count : total;
+          }, -1) + area.count);
+
+        return area;
+      });
+
+    let arc = d3.arc()
+      .innerRadius(this.config.radiusMin - 23)
+      .outerRadius(this.config.radiusMin - 20)
+      .startAngle(d => d.startAngle)
+      .endAngle(d => d.endAngle);
+
+    group.append('g').classed('SectionLabels', true).selectAll('.Section--line')
+      .data(areasData)
+      .enter()
+      .append('path')
+      .attr('class', 'Section--line')
+      .attr('fill', d => d.color)
+      .attr('d', arc)
+
+    let labelRadius = this.config.radiusMin - 21.5;
+
+    group.append('g').classed('SectionLabels--paths', true).selectAll('.Section--labelArc')
+      .data(areasData)
+      .enter()
+      .append('path')
+      .attr('id', (d, idx) => 'Section--labelArc_' + idx)
+      .attr('class', 'Section--labelArc')
+      .attr('d', (d, idx) => {
+        let angleStart = d.startAngle;
+        let angleEnd = d.endAngle;
+        let angleMid = (d.startAngle + d.endAngle) / 2;
+
+        let pStart = pointCircle(labelRadius, angleStart);
+        let pEnd = pointCircle(labelRadius, angleEnd);
+
+        return angleMid < PI / 2 || angleMid > PI * 1.5 ?
+          `M ${pStart[0]}, ${pStart[1]} A ${labelRadius}, ${labelRadius} 0 0 1 ${pEnd[0]}, ${pEnd[1]}` :
+          `M ${pEnd[0]}, ${pEnd[1]} A ${labelRadius}, ${labelRadius} 0 0 0 ${pStart[0]}, ${pStart[1]}`;
+      });
+
+    group.append('g').classed('SectionLabels--textDebug', true).selectAll('.areaLabelDebug')
+      .data(areasData)
+      .enter()
+      .append('text')
+      .attr('class', (d, idx) => 'areaLabelDebug ' + '#areaLabel_' + idx)
+      .attr('x', 0)
+      .attr('dy', 5)
+      .attr('text-anchor', 'middle')
+      .append('textPath')
+      .attr('xlink:href', (d, idx) => '#Section--labelArc_' + idx)
+      .attr('startOffset', '50%')
+      .text(d => d.name);
+
+    let labelTagRadiusMax = this.config.radiusMin - 21.5 + 15;
+    let labelTagRadiusMin = this.config.radiusMin - 21.5 - 15;
+
+    let tagsData = d3.selectAll('.areaLabelDebug').nodes()
+      .map((node, idx) => {
+        let textLength = node.getComputedTextLength() + 10;
+        let midAngle = (areasData[idx].startAngle + areasData[idx].endAngle) / 2;
+        let startAngle = areasData[idx].startAngle;
+        let endAngle = areasData[idx].endAngle;
+        let circumference = 2 * PI * labelRadius;
+        //let partCircumference = (endAngle-startAngle) / (2 * PI) * circumference;
+
+        let offsetAngle = (textLength / 2 / circumference) * 2 * PI;
+        let offsetSide = 0.03;
+        let color = areasData[idx].color;
+
+        return {
+          color,
+          startAngle,
+          endAngle,
+          midAngle,
+          offsetAngle,
+          offsetSide
+        };
+      });
+
+    group.append('g').classed('SectionLabels--shapes', true).selectAll('.areaLabelTag')
+      .data(tagsData)
+      .enter()
+      .insert('path')
+      .attr('fill', d => d.color)
+      .attr('stroke', d => d.color)
+      .attr('stroke-width', 3)
+      .attr('class', 'areaLabelTag')
+      .attr('d', (d, idx) => {
+        let p1 = pointCircle(labelTagRadiusMax, d.midAngle - d.offsetAngle);
+        let p2 = pointCircle(labelTagRadiusMax, d.midAngle + d.offsetAngle);
+        let p3 = pointCircle(labelRadius, d.midAngle + d.offsetAngle + d.offsetSide);
+        let p4 = pointCircle(labelTagRadiusMin, d.midAngle + d.offsetAngle);
+        let p5 = pointCircle(labelTagRadiusMin, d.midAngle - d.offsetAngle);
+        let p6 = pointCircle(labelRadius, d.midAngle - d.offsetAngle - d.offsetSide);
+
+        return `
+        M ${p1[0]}, ${p1[1]} A ${labelTagRadiusMax}, ${labelTagRadiusMax} 0 0 1 ${p2[0]}, ${p2[1]} L ${p3[0]}, ${p3[1]} L ${p4[0]}, ${p4[1]} A ${labelTagRadiusMin}, ${labelTagRadiusMin} 0 0 0 ${p5[0]},
+${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
+      });
+
+    group.selectAll('SectionLabels--textDebug').remove();
+
+    group.append('g').classed('SectionLabels--text', true).selectAll('.areaLabel')
+      .data(areasData)
+      .enter()
+      .append('text')
+      .attr('class', (d, idx) => 'areaLabel ' + '#areaLabel_' + idx)
+      .attr('x', 0)
+      .attr('dy', 5)
+      .attr('text-anchor', 'middle')
+      .append('textPath')
+      .attr('xlink:href', (d, idx) => '#Section--labelArc_' + idx)
+      .attr('startOffset', '50%')
+      .text((d, idx) => {
+        const textWidth = getTextLength(d.name, this.svg);
+        const pathWidth = document.getElementById('Section--labelArc_' + idx).getTotalLength();
+        const percent = Math.floor(pathWidth / textWidth * 0.8 * 100) / 100;
+
+        return textWidth > pathWidth ? 
+         pathWidth > 10 ? `${textPercentWidth(d.name, percent)}...` : '' :
+         d.name;
+      });
   }
 
   animateItems(selection) {
@@ -430,11 +591,9 @@ class Chart {
 
     this.drawLegend();
     this.drawItemsLines();
+    this.drawItemLabels();
+    this.drawAreaLebels();
     this.drawItems();
-
-    // this.drawItemLabels(this.group, this.data.items, this.config);
-    // this.drawAreaLebels(this.group, this.data, this.config);
-    // this.drawItems(this.group, this.data, this.config);
 
     if (this.options.debug) {
       this.drawDebugLayer();

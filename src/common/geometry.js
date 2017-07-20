@@ -64,3 +64,11 @@ export function endAll (transition, callback) {
     if (!--n) callback.apply(this, arguments)
   })
 }
+
+export function textPercentWidth (str, percent) {
+  if (percent >= 1) {
+    return str
+  } else {
+    return str.slice(0, Math.floor(percent * str.length))
+  }
+}
