@@ -1,5 +1,5 @@
 <template>
-  <svg id="radar" class="scaling-svg" viewBox="0 0 1000 1000"></svg>
+  <svg id="radar" class="RadarChart scaling-svg" viewBox="0 0 1000 1000"></svg>
 </template>
 
 <script>
@@ -28,20 +28,28 @@
       }
     },
     mounted: function () {
-      let radar = new Chart(this.$el, this.radarData, this.onBlipClick)
-      console.log(radar)
+      const options = {
+        debug: this.$route.query.debug === 'true', // do NOT typecast string bool
+        limit: this.$route.query.limit
+      }
+
+      let radar = new Chart(this.$el, this.radarData, this.onBlipClick, options)
+      radar.init()
     },
     watch: {
       radarData: function () {
+        // @TODO: implement update pattern without clearing out svg elements;
+        // @TODO: add some animation upon update
+
         this.$el.innerHTML = ''
         let radar = new Chart(this.$el, this.radarData, this.onBlipClick)
-        console.log(radar)
+        radar.init()
       }
     }
   }
 </script>
 
-<style>
+<style lang="scss">
   .scaling-svg-container {
     position: relative;
     height: 0;
@@ -84,6 +92,7 @@
   }
 
   .legendLabel {
+    font-style: normal;
     fill: #333;
   }
 
@@ -95,6 +104,21 @@
   .legendArcOuter {
     fill: rgba(255, 255, 255, 0.5);
   }
+
+  .RadarChart.debug {
+    // Legend-background
+    .legendArcOuter {
+      // fill: rgba(255, 0, 128, 0.5);
+      stroke: cyan;
+    }
+    .legendArcBg {
+      stroke: magenta;
+    }
+    .legendArcInnerPath {
+      stroke: red;
+    }
+  }
+
 
 
 </style>

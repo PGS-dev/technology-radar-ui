@@ -6,31 +6,37 @@ const HISTORY_COLOR = '#7a7a7a';
 const PI = 3.14159;
 
 class Chart {
-  constructor(el, data, clickHandler) {
-    this.chartInit(el, data, clickHandler)
-    return el;
+  constructor(el, data, clickHandler, options) {
+    this.svg = d3.select(el);   
+    this.options = options;
+    
+    this.data = this.processData(data);
+    this.config = this.getConfig();
+    this.events = {
+      click: clickHandler
+    };
   }
 
-  drawChart(el, data, clickHandler) {
-    console.log('raw data', data.items.filter(i => !!i.history));
-
-    const svg = d3.select(el);
-    const config = this.getConfig(svg, data.items, data.statuses, clickHandler);
-
-    if (!config) {
-      console.warn('No data to generate radar.', data);
-      return false;
-    }
-
-    let g = svg.append('g')
+  drawChart() {
+     this.group = svg.append('g')
       .attr('transform', `translate(${config.center.x}, ${config.center.y})`);
 
-    // drawDebugLayer(g, config);
-    this.drawLegend(g, data, config);
-    this.drawItemsLines(g, data, config);
-    this.drawItemLabels(g, data.items, config);
-    this.drawAreaLebels(g, data, config);
-    this.drawItems(g, data, config);
+    this.drawLegend(this.group, data, config);
+    this.drawItemsLines(this.group, data, config);
+    this.drawItemLabels(this.group, data.items, config);
+    this.drawAreaLebels(this.group, data, config);
+    this.drawItems(this.group, data, config);
+  }
+
+  drawDebugLayer() {
+    console.warn('--- DEBUG LAYER ---');
+
+    console.log('this.config.angleStart', this.config.angleStart);
+    console.log('this.config.angleStart', this.config.angleEnd);
+    console.log('this.config.angleStep', this.config.angleStep);
+
+    const debugLayer = this.group.append('g');
+
   }
 
   drawItemLabels(selection, items, config) {
@@ -239,64 +245,63 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .attr('stroke', config.colors.lineLight);
   }
 
-  drawLegend(selection, data, config) {
-
-    let statuses = Object.keys(config.statuses).map((val, idx) => {
+  drawLegend() {
+    const statuses = Object.keys(this.config.statuses).map((val, idx) => {
       return {
         idx,
         name: val,
-        step: config.statuses[val]
+        step: this.config.statuses[val]
       }
     });
 
-    let arcBg = function (d) {
-      let r = config.radiusMaxLine - (d.step + 0.25 / 2) * (config.radiusMaxLine - config.radiusMin - config.buffer);
-      let r2 = config.radiusMaxLine - (d.step - 0.25 / 2) * (config.radiusMaxLine - config.radiusMin - config.buffer);
+    let arcBg = (d) => {
+      const r = this.config.radiusMaxLine - (d.step + 0.25 / 2) * (this.config.radiusMaxLine - this.config.radiusMin - this.config.buffer);
+      const r2 = this.config.radiusMaxLine - (d.step - 0.25 / 2) * (this.config.radiusMaxLine - this.config.radiusMin - this.config.buffer);
       return d3.arc()
         .innerRadius(r + 2)
         .outerRadius(r2 - 2)
         .cornerRadius(10)
-        .startAngle(-(2 * PI - config.angleEnd) - config.angleStep/2)
-        .endAngle(config.angleStart - config.angleStep/2)();
+        .startAngle(-(2 * PI - this.config.angleEnd) - this.config.angleStep/2)
+        .endAngle(this.config.angleStart - this.config.angleStep/2)();
     };
 
-    let arcInner = function (d) {
-      let r = config.radiusMaxLine - d.step * (config.radiusMaxLine - config.radiusMin - config.buffer);
+    let arcLegend = (d) => {
+      let r = this.config.radiusMaxLine - d.step * (this.config.radiusMaxLine - this.config.radiusMin - this.config.buffer);
       return d3.arc()
         .innerRadius(r)
         .outerRadius(r + 1)
-        .startAngle((2 * PI - config.angleEnd) - config.angleStep)
-        .endAngle(config.angleStart)();
+        .startAngle(-(2 * PI - this.config.angleEnd) - this.config.angleStep/2)
+        .endAngle(this.config.angleStart  - this.config.angleStep/2)();
     };
 
-    let arcOuter = function (d) {
-      let r = config.radiusMaxLine - (d.step + 0.25 / 2) * (config.radiusMaxLine - config.radiusMin - config.buffer);
-      let r2 = config.radiusMaxLine - (d.step - 0.25 / 2) * (config.radiusMaxLine - config.radiusMin - config.buffer);
+    let arcOuter = (d) => {
+      let r = this.config.radiusMaxLine - (d.step + 0.25 / 2) * (this.config.radiusMaxLine - this.config.radiusMin - this.config.buffer);
+      let r2 = this.config.radiusMaxLine - (d.step - 0.25 / 2) * (this.config.radiusMaxLine - this.config.radiusMin - this.config.buffer);
       return d3.arc()
         .innerRadius(r + 2)
         .outerRadius(r2 - 2)
         .cornerRadius(10)
-        .startAngle(config.angleStart - config.angleStep/2)
-        .endAngle(config.angleEnd - config.angleStep/2)();
+        .startAngle(this.config.angleStart - this.config.angleStep/2)
+        .endAngle(this.config.angleEnd - this.config.angleStep/2)();
     };
 
-    selection.selectAll('.legendArcBg')
+    this.group.append('g').classed('Legend-background', true).selectAll('.legendArcBg')
       .data(statuses)
       .enter()
       .append('path')
       .attr('class', 'legendArcBg')
       .attr('d', d => arcBg(d));
 
-    selection.selectAll('.legendArcOuter')
+    this.group.append('g').classed('Legend-arcOuter', true).selectAll('.legendArcOuter')
       .data(statuses)
       .enter()
       .append('path')
       .attr('class', 'legendArcOuter')
-      .attr('fill', '#f7f7f7')
+      .attr('fill', 'red')
       .attr('d', d => arcOuter(d)
       );
 
-    selection.selectAll('.legendArcInnerPath')
+    this.group.append('g').classed('Legend-innerPath', true).selectAll('.legendArcInnerPath')
       .data(statuses)
       .enter()
       .append('path')
@@ -306,22 +311,22 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .attr('fill', 'none')
       .attr('stroke', 'none')
       .attr('d', d => {
-          return arcInner(d).split('L')[0]
+          return arcLegend(d).split('L')[0]
         }
       )
     ;
 
-    selection.selectAll('.legendLabel')
+    this.group.append('g').classed('Legend-labels', true).selectAll('.legendLabel')
       .data(statuses)
       .enter()
       .append('text')
       .attr('class', (d, idx) => 'legendLabel')
       .attr('x', 0)
       .attr('dy', 8)
-      .attr('text-anchor', 'left')
+      .attr('text-anchor', 'middle')
       .append('textPath')
       .attr('xlink:href', (d, idx) => '#legendArcInnerPath_' + idx)
-      .attr('startOffset', '0%')
+      .attr('startOffset', '50%')
       .text((d) => d.name)
     ;
 
@@ -431,8 +436,10 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       areas: {}
     };
 
+    const blips = this.options.debug && this.options.limit ? rawData.blips.slice(0, this.options.limit) : rawData.blips;
+
     data.items = [ // blips
-      ...(rawData.blips || []).map(blip => {
+      ...(blips || []).map(blip => {
         blip.section = blip.section.trim();
         return blip;
       })].sort(function (a, b) {
@@ -456,9 +463,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
 
     let areas = data.items // == sections
         .map(item => item.section.trim())
-        .filter((item, idx, self) => self.indexOf(item) === idx)
-      ;
-
+        .filter((item, idx, self) => self.indexOf(item) === idx);
 
     areas.forEach((area, idx) => {
       data.areas[area] = {
@@ -497,7 +502,12 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
     return deg * (PI / 180);
   }
 
-  getConfig(containerEl, items, statusesNames, clickHandler) {
+  getConfig() {
+    /* --- local pointers */
+    const containerEl = this.svg;
+    const items = this.data.items;
+    const statusesNames = this.data.statuses;
+
     const width = 1000;
     const height = 1000;
     const legendReserverAngle = 10;
@@ -529,8 +539,6 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       statuses[statusName] = r - (1 / statusesNames.length) / 2;
       r = r + 1 / statusesNames.length;
     }
-
-    console.log('statuses', statuses);
 
     // --- estimate length of longest technology
     const longestLabel = items.map(item => item.name
@@ -577,8 +585,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       angleStart,
       angleEnd,
       angleStep,
-      statuses,
-      clickHandler
+      statuses
     }
   }
 
@@ -705,8 +712,27 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
     }
   }
 
-  chartInit(el, data, clickHandler) {
-    this.drawChart(el, this.processData(data), clickHandler);
+  /** Main init function */
+  init() {
+    this.svg.classed('debug', !!this.options.debug);
+    this.group = this.svg.append('g')
+      .classed('RadarChart-group', true)
+      .attr('transform', `translate(${this.config.center.x}, ${this.config.center.y})`);
+
+    this.drawLegend();    
+    this.drawItemsLines(this.group, this.data, this.config);
+    this.drawItemLabels(this.group, this.data.items, this.config);
+    this.drawAreaLebels(this.group, this.data, this.config);
+    this.drawItems(this.group, this.data, this.config);
+
+    if (this.options.debug) {
+      this.drawDebugLayer();
+    }
+  }
+
+  /** Update function */
+  update(data) {
+
   }
 }
 
