@@ -363,10 +363,11 @@ class Chart {
 
         let pStart = pointCircle(labelRadius, angleStart);
         let pEnd = pointCircle(labelRadius, angleEnd);
+        let pDiff = d.endAngle - d.startAngle > PI;
 
         return angleMid < PI / 2 || angleMid > PI * 1.5 ?
           `M ${pStart[0]}, ${pStart[1]} A ${labelRadius}, ${labelRadius} 0 0 1 ${pEnd[0]}, ${pEnd[1]}` :
-          `M ${pEnd[0]}, ${pEnd[1]} A ${labelRadius}, ${labelRadius} 0 0 0 ${pStart[0]}, ${pStart[1]}`;
+          `M ${pEnd[0]}, ${pEnd[1]} A ${labelRadius}, ${labelRadius} 0 ${pDiff ? 1 : 0} 0 ${pStart[0]}, ${pStart[1]}`;
       });
 
     group.append('g').classed('SectionLabels--textDebug', true).selectAll('.areaLabelDebug')

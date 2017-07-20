@@ -107,9 +107,6 @@
     
     .Section--labelArc {
       fill: none;
-      // stroke: red;
-      // stroke-dasharray: 5 5;
-      // stroke-width: 5;
     }
 
     .areaLabel {
@@ -127,6 +124,13 @@
     .Legend-innerPath {
       stroke: deeppink;
     }
+    .Section--labelArc {
+      fill: none;
+      stroke: red;
+      stroke-dasharray: 5 5;
+      stroke-width: 5;
+    }
+
   }
 
   .RadarChar-debug {
