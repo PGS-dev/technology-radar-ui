@@ -524,7 +524,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
     const count = items.length;
     const bound = Math.min(WIDTH, HEIGHT);
 
-    const legendReserverAngle = 15;
+    const legendReserverAngle = this.options.legendAngle || 15;
     const baseAngle = 0;
 
     const center = {
