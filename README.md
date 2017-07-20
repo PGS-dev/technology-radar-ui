@@ -12,8 +12,6 @@ it is `11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc`
 - open visualisation with you spreadsheet id  
   `https://pgs-dev.github.io/technology-radar-ui/{spreadsheetId}`
   in our example [https://pgs-dev.github.io/technology-radar-ui/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc](https://pgs-dev.github.io/technology-radar-ui/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc)
-- TEMP: allow to load mixed content (in browser address bar)  
-  Just because our parser is *temporary* loaded over HTTP but spreadsheet and UI over HTTPS
 
 ##Example radars  
 
