@@ -392,7 +392,6 @@ class Chart {
         let startAngle = areasData[idx].startAngle;
         let endAngle = areasData[idx].endAngle;
         let circumference = 2 * PI * labelRadius;
-        //let partCircumference = (endAngle-startAngle) / (2 * PI) * circumference;
 
         let offsetAngle = (textLength / 2 / circumference) * 2 * PI;
         let offsetSide = 0.03;
@@ -602,7 +601,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
 
   /** Update function */
   update(data) {
-
+    // @TODO: implement General Update Pattern
   }
 }
 
