@@ -25,7 +25,7 @@ const state = {
   },
   currentSnapshot: {},
   snapshots: null,
-  allBlips: []
+  allBlips: {}
 }
 
 export default new Vuex.Store({

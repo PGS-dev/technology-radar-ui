@@ -58,7 +58,7 @@ export const getSnapshot = ({commit}, {spreadsheetId, snapshotId}) => {
     })
 }
 
-export const getAllBlips = ({commit}, spreadsheetId) => {
+export const getAllBlips = ({commit}, {spreadsheetId}) => {
   commit('GET_BLIPS_REQUEST')
 
   return fetchAllBlips(spreadsheetId)
