@@ -17,32 +17,20 @@ export const fetchSnapshots = (spreadsheetId) => {
   return defaultFetchMethod(url)
 }
 
-export const fetchAllBlips = (spreadsheetId) => {
+export const fetchAllBlips = async (spreadsheetId) => {
   const url = `${BACKEND_URL}/${spreadsheetId}/blips`
 
   // TODO: This should be delivered by backend in one request...
-  let p1 = new Promise(resolve => {
-    // Fetch snapshots, then fetch first snapshot just for statuses and sections
-    fetchSnapshots(spreadsheetId)
-      .then(snapshotsResponse => {
-        fetchSnapshot(spreadsheetId, _.result(snapshotsResponse, '[0].name'))
-          .then(snap => {
-            resolve({
-              statuses: snap.statuses,
-              sections: snap.sections
-            })
-          })
-      })
-  })
+  const spreadsheetsCollection = await fetchSnapshots(spreadsheetId)
+  const firstSpreadsheetData = await fetchSnapshot(spreadsheetId, _.result(spreadsheetsCollection, '[0].name'))
+  const allBlipsCollection = await defaultFetchMethod(url)
+  const output = {
+    statuses: _.result(firstSpreadsheetData, 'statuses'),
+    sections: _.result(firstSpreadsheetData, 'sections'),
+    blips: allBlipsCollection
+  }
 
-  let p2 = new Promise(resolve => {
-    // Fetch all blips
-    defaultFetchMethod(url).then(response => resolve({blips: response}))
-  })
-
-  return Promise
-    .all([p1, p2])
-    .then(responses => Object.assign(responses[0], responses[1]))
+  return output
 }
 
 export const fetchSnapshot = (spreadsheetId, snapshotId) => {
