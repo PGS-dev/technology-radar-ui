@@ -33,8 +33,7 @@
       'radar': Radar
     },
     props: [
-      'spreadsheetId',
-      'snapshotId'
+      'spreadsheetId'
     ],
     computed: mapState({
       loader: state => state.loaders.snapshot,
