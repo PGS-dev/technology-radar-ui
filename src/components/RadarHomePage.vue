@@ -1,45 +1,68 @@
 <template>
-  <section>
-    <md-tabs md-fixed class="md-transparent">
-      <md-tab id="chart" md-label="Chart">
-        <radar v-if="allBlips && allBlips.blips"
-               :radar-data="allBlips"
-               :spreadsheet-id="spreadsheetId">
-        </radar>
-      </md-tab>
+  <div>
+    <h1>{{radarName}}</h1>
+    <div class="u-textCenter">
+      <h2>Current state</h2>
+      <p>See all blips in current state - even theese which wasn`t changed for a long time</p>
+      <router-link
+        :to="`/${spreadsheetId}/overview`"
+        class="md-default md-raised"
+        tag="md-button">
+        Overview
+      </router-link>
+    </div>
+    <div class="u-textCenter">
+      <h2>Snapshots</h2>
+      <p>See blips added or updated since last two snapshots</p>
+      <router-link
+        v-for="snapshot in snapshots"
+        :key="snapshot.name"
+        :to="`/${spreadsheetId}/${snapshot.name}`"
+        tag="md-button"
+        class="md-default md-raised">
+        {{snapshot.name}}
+      </router-link>
+    </div>
 
-      <md-tab id="table" md-label="Table">
-        <blips-table v-if="allBlips && allBlips.blips"
-                     :blips="allBlips.blips"
-                     :spreadsheet-id="spreadsheetId">
-        </blips-table>
-      </md-tab>
-    </md-tabs>
-
-    <md-spinner v-if="loader" md-indeterminate></md-spinner>
-
-  </section>
+  </div>
 </template>
 
 <script>
   import {mapState} from 'vuex'
-  import BlipsTable from './BlipsTable'
-  import Radar from './Radar'
 
   export default {
     name: 'radarHomePage',
-    components: {
-      'blipsTable': BlipsTable,
-      'radar': Radar
-    },
     props: [
       'spreadsheetId'
     ],
     computed: mapState({
-      allBlips: state => state.allBlips
-    }),
-    mounted: function () {
-      this.$store.dispatch('getAllBlips', {spreadsheetId: this.spreadsheetId})
-    }
+      snapshots: state => state.snapshots,
+      radarName: state => state.radarDetails.tittle
+    })
   }
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+  h1 {
+    text-align: center;
+    margin: 100px 0;
+    font-weight: 100;
+    font-size: 50px;
+  }
+
+  h2 {
+    text-align: center;
+    font-weight: 100;
+    margin: 80px 0 0;
+    font-size: 30px;
+  }
+
+  p {
+    color: #999;
+  }
+
+  .u-textCenter {
+    text-align: center;
+  }
+</style>

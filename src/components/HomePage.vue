@@ -21,8 +21,18 @@
 
       <div class="examples">
         <p>Or try sample radars:</p>
-        <router-link to="/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/" tag="md-button">Frontend Radar</router-link>
-        <router-link to="/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg/" tag="md-button">.NET Radar</router-link>
+        <router-link
+          to="/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/"
+          tag="md-button"
+          class="md-default md-raised">
+          Frontend Radar
+        </router-link>
+        <router-link
+          to="/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg/"
+          tag="md-button"
+          class="md-default md-raised">
+          .NET Radar
+        </router-link>
       </div>
 
     </div>

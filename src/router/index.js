@@ -4,6 +4,7 @@ import SnapshotPage from '@/components/SnapshotPage'
 import RadarHomePage from '@/components/RadarHomePage'
 import HomePage from '@/components/HomePage'
 import BlipPage from '@/components/BlipPage'
+import OverviewPage from '@/components/OverviewPage'
 
 Vue.use(Router)
 
@@ -20,6 +21,12 @@ export default new Router({
       path: '/:spreadsheetId',
       name: 'RadarHomePage',
       component: RadarHomePage,
+      props: true
+    },
+    {
+      path: '/:spreadsheetId/overview',
+      name: 'OverviewPage',
+      component: OverviewPage,
       props: true
     },
     {
