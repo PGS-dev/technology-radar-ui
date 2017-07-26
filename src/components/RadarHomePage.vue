@@ -3,7 +3,7 @@
     <h1>{{radarName}}</h1>
     <div class="u-textCenter">
       <h2>Current state</h2>
-      <p>See all blips in current state - even theese which wasn`t changed for a long time</p>
+      <p>See all technologies in current state - even archived, not changed for a long time</p>
       <router-link
         :to="`/${spreadsheetId}/overview`"
         class="md-default md-raised"
@@ -13,7 +13,7 @@
     </div>
     <div class="u-textCenter">
       <h2>Snapshots</h2>
-      <p>See blips added or updated since last two snapshots</p>
+      <p>See technologies added or updated since last two snapshots</p>
       <router-link
         v-for="snapshot in snapshots"
         :key="snapshot.name"
