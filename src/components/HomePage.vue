@@ -25,13 +25,19 @@
           to="/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/"
           tag="md-button"
           class="md-default md-raised">
-          Frontend Radar
+          PGS Frontend Radar
         </router-link>
         <router-link
           to="/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg/"
           tag="md-button"
           class="md-default md-raised">
-          .NET Radar
+          PGS .NET Radar
+        </router-link>
+        <router-link
+          to="/1yBHW-O8drEx02PAtLujLsdcZF_-g5WgVN_oj0xpiczo/"
+          tag="md-button"
+          class="md-default md-raised">
+          PGS Java Radar
         </router-link>
       </div>
 
