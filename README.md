@@ -4,35 +4,35 @@
 
 This project is an user interface for visualising technology radars stored as spreadsheets
 
-To visualise your own radar:  
+To visualise your own radar:
 - use following [spreadsheet template](https://docs.google.com/spreadsheets/d/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/edit#gid=0) (create your own copy)
-- find spreadsheet id in the url  
-in our case for url `https://docs.google.com/spreadsheets/d/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/edit#gid=0`  
+- find spreadsheet id in the url
+in our case for url `https://docs.google.com/spreadsheets/d/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/edit#gid=0`
 it is `11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc`
-- open visualisation with you spreadsheet id  
+- open visualisation with you spreadsheet id
   `https://pgs-dev.github.io/technology-radar-ui/{spreadsheetId}`
   in our example [https://pgs-dev.github.io/technology-radar-ui/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc](https://pgs-dev.github.io/technology-radar-ui/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc)
 
-##Example radars  
+##Example radars
 
-**Frontend**  
+**Frontend**
 - [spreadsheet with data](https://docs.google.com/spreadsheets/d/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc/edit#gid=0)
 - [radar UI](https://pgs-dev.github.io/technology-radar-ui/11IUPvEX2RJ_ZoNMQeSVo7ghj2-BpeTCUIG3KoMf7Ifc)
 
-**.NET**  
-- [spreadsheet with data](https://docs.google.com/spreadsheets/d/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg/edit#gid=0)
-- [radar UI](https://pgs-dev.github.io/technology-radar-ui/18Wg-5N7qOnEr1sbSx2f_Yh90kTYNAxnpW7ZHE_9orQg)
+**.NET**
+- [spreadsheet with data](https://docs.google.com/spreadsheets/d/19eUTAQ-jJN9Wec8J0MqvBX2jPX9tG1Ncs-9i7DqP-AQ/edit#gid=0)
+- [radar UI](https://pgs-dev.github.io/technology-radar-ui/19eUTAQ-jJN9Wec8J0MqvBX2jPX9tG1Ncs-9i7DqP-AQ)
 
 
 ## Other links
 
 ### Backend
-- repository (Java)   
-https://bitbucket.pgs-soft.com/projects/PNP/repos/techradar-backend/browse  
-- Backend (Spreadsheet based)   
+- repository (Java)
+https://bitbucket.pgs-soft.com/projects/PNP/repos/techradar-backend/browse
+- Backend (Spreadsheet based)
 https://techradar-api.pgs-soft.com/api
-- API contract (Raml)  
-https://bitbucket.pgs-soft.com/projects/PFP/repos/pgs-technology-radar-api/browse/api.raml  
+- API contract (Raml)
+https://bitbucket.pgs-soft.com/projects/PFP/repos/pgs-technology-radar-api/browse/api.raml
 
 ## Build Setup
 
