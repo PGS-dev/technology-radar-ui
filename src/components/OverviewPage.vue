@@ -6,6 +6,9 @@
                :radar-data="currentSnapshot"
                :spreadsheet-id="spreadsheetId">
         </radar>
+        <a class="PrintButton" href="overview/print" target="_blank">
+          <md-button class="md-default">PRINT</md-button>
+        </a>
       </md-tab>
 
       <md-tab id="table" md-label="Table">
@@ -56,5 +59,11 @@
 
   .md-tab-header-container > span {
     color: red
+  }
+
+  .PrintButton {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
   }
 </style>

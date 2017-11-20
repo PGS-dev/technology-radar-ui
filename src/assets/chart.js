@@ -248,6 +248,11 @@ class Chart {
       }
     });
 
+    let circleSize = points.length > 0 ? 500/points.length : 0;
+    circleSize = circleSize > 5 ? 5 : circleSize;
+    let triangleSize = points.length > 0 ? 3000/points.length : 0;
+    triangleSize = triangleSize > 50 ? 50 : triangleSize;
+
     /* --- draw old items history lines --- */
     this.group.append('g').classed('Items--historyLines', true).selectAll('.Items--historyLine')
       .data(points.filter(d => !!d.pathHistory))
@@ -271,10 +276,10 @@ class Chart {
       .attr('stroke-width', 1.5)
       .attr('cx', d => d.positionStart[0])
       .attr('cy', d => d.positionStart[1])
-      .attr('r', 4)
+      .attr('r', circleSize)
       .call(this.animateItems);
 
-    /** --- draw new items --- */
+    /* --- draw new items --- */
     this.group.append('g').classed('Items--new', true).selectAll('.itemNew')
       .data(points.filter(d => d.isNew))
       .enter()
@@ -283,7 +288,7 @@ class Chart {
       .attr('fill', 'none')
       .attr('stroke', 'none')
       .attr('stroke-width', 1.5)
-      .attr('d', SYMBOL_TRIANGLE.size(NEW_ITEM_SIZE))
+      .attr('d', SYMBOL_TRIANGLE.size(triangleSize))
       .attr('transform', d => `translate(${d.positionEnd[0]}, ${d.positionEnd[1]}) rotate(${rad2deg(d.angle) - 60})`)
       .transition()
       .delay((d, idx) => idx * NEW_ITEM_DELAY)
@@ -292,17 +297,23 @@ class Chart {
   }
 
   drawItemLabels() {
+    let fontSize = 100;
     let arcLabel = d3.arc()
       .outerRadius(this.config.radiusMax)
       .innerRadius(this.config.radiusMax)
       .startAngle(d => this.config.scaleRadialPositionShifted(d))
       .endAngle(d => this.config.scaleRadialPositionShifted(d));
 
+    if(this.data.items.length > 120) {
+      fontSize =  Math.ceil(fontSize / this.data.items.length * 120);
+    }
+
     this.group.append('g').classed('ItemsLabels', true).selectAll('.ItemLabel')
       .data(this.data.items)
       .enter()
       .append('text')
       .attr('class', 'ItemLabel')
+      .attr('font-size', fontSize + '%')
       .attr('alignment-baseline', 'middle')
       .attr('transform', (d, idx) => {
         const midAngle = this.config.scaleRadialPositionShifted(idx);
@@ -317,7 +328,7 @@ class Chart {
 
   drawAreaLebels() {
     const group = this.group.append('g').classed('Sections', true);
-    
+
     let areasData = Object.keys(this.data.areas)
       .map(area => Object.assign(this.data.areas[area], {
         name: area
@@ -447,7 +458,7 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
         const pathWidth = document.getElementById('Section--labelArc_' + idx).getTotalLength();
         const percent = Math.floor(pathWidth / textWidth * 0.8 * 100) / 100;
 
-        return textWidth > pathWidth ? 
+        return textWidth > pathWidth ?
          pathWidth > 10 ? `${textPercentWidth(d.name, percent)}...` : '' :
          d.name;
       });
@@ -548,10 +559,10 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
       .sort((a, b) => (b.length - a.length))[0];
     const longestLabelWidth = getTextLength(longestLabel, containerEl);
 
-    // 2. 
+    // 2.
     const radiusMin = 200;
     const radiusMax = 0.5 * 0.85 * (bound - longestLabelWidth);
-    const radiusMaxPadding = radiusMax - 10; // 
+    const radiusMaxPadding = radiusMax - 10; //
 
     // calulating angles
     const angleStart = deg2rad(legendReserverAngle);
