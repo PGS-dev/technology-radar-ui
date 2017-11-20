@@ -39,6 +39,18 @@
           class="md-default md-raised">
           PGS Java Radar
         </router-link>
+        <router-link
+          to="/1OGNQiG5YR-9kJNPrYSf1GK_CAUG_rdSV7LPtdKyrxVw/"
+          tag="md-button"
+          class="md-default md-raised">
+          PGS PHP Radar
+        </router-link>
+        <router-link
+          to="/1SiCskPVGV3v1yL977vMxeoZNe0Jbj45GDAZRszJQzvY/"
+          tag="md-button"
+          class="md-default md-raised">
+          PGS QA Radar
+        </router-link>
       </div>
 
     </div>
