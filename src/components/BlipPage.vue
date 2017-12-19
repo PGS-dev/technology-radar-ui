@@ -16,6 +16,7 @@
             <router-link :to="`/${spreadsheetId}/${change.snapshotName}`" class="history-link">
               <span class="history-status">{{change.newStatus}}</span>
               <span class="history-snapshot">{{change.snapshotName}}</span>
+              <p class="history-comment" v-if="change.comment">{{change.comment}}</p>
             </router-link>
           </li>
         </ul>
@@ -112,7 +113,7 @@
     transform: translateX(-16px) translateY(-10px);
   }
 
-  .history-link {
+  A.history-link {
     background: rgba(255,255,255, 0.5);
     padding: 15px 20px;
     display: inline-block;
@@ -136,5 +137,10 @@
   .history-snapshot {
     display: block;
     text-decoration: none;
+  }
+
+  .history-comment {
+    color: #999;
+    margin: 5px 0 0 0;
   }
 </style>
