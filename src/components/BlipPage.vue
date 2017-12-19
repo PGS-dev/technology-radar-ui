@@ -14,7 +14,7 @@
         <ul>
           <li v-for="(change, idx) in blipDetails.history" :key="idx">
             <router-link :to="`/${spreadsheetId}/${change.snapshotName}`" class="history-link">
-              <span class="history-status">{{change.newStatus}}</span>
+              <span class="history-status">{{change.newStatus !== change.oldStatus ? change.newStatus : ''}}</span>
               <span class="history-snapshot">{{change.snapshotName}}</span>
               <p class="history-comment" v-if="change.comment">{{change.comment}}</p>
             </router-link>
