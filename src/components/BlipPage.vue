@@ -118,7 +118,7 @@
     padding: 15px 20px;
     display: inline-block;
     text-decoration: none;
-    color: #333;
+    color: #333 !important;
     width: 250px;
     border-radius: 5px;
   }
