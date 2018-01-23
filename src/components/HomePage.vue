@@ -34,7 +34,7 @@
           PGS .NET Radar
         </router-link>
         <router-link
-          to="/1yBHW-O8drEx02PAtLujLsdcZF_-g5WgVN_oj0xpiczo/"
+          to="/1nXvauhn5ZA3IKcr-l1Aei2w9IXNmX-QtWwfa7pWhdu8/"
           tag="md-button"
           class="md-default md-raised">
           PGS Java Radar
