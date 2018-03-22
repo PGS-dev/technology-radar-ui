@@ -442,10 +442,16 @@ ${p5[1]} L ${p6[0]}, ${p6[1]} L ${p1[0]}, ${p1[1]}`;
 
     group.selectAll('SectionLabels--textDebug').remove();
 
-    group.append('g').classed('SectionLabels--text', true).selectAll('.areaLabel')
+    let sectionLabelsText = group.append('g').classed('SectionLabels--text', true).selectAll('.areaLabel')
       .data(areasData)
       .enter()
-      .append('text')
+      .append('text');
+
+    sectionLabelsText
+      .append('title')
+      .text(d => d.name);
+
+    sectionLabelsText
       .attr('class', (d, idx) => 'areaLabel ' + '#areaLabel_' + idx)
       .attr('x', 0)
       .attr('dy', 5)
