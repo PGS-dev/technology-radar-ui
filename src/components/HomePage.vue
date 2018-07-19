@@ -51,6 +51,12 @@
           class="md-default md-raised">
           PGS QA Radar
         </router-link>
+        <router-link
+          to="/1hVJMnhZ8IMsMAOGkxm0PwE-NIrE1korWXaN0ol_mUCQ/"
+          tag="md-button"
+          class="md-default md-raised">
+          PGS BA Radar
+        </router-link>
       </div>
 
     </div>
