@@ -21,6 +21,9 @@ import {
   textPercentWidth,
 } from '../common/geometry';
 
+function sanitizeId(id) {
+  return id.replace(/([^\w:\-\.])/g, '');
+}
 
 class Chart {
   constructor(el, data, onClick, options) {
@@ -150,6 +153,7 @@ class Chart {
       .enter()
       .append('path')
       .attr('class', 'legendArcOuter')
+      .attr('id', (d) => 'legendArcOuter_' + sanitizeId(d.name))
       .attr('fill', 'red')
       .attr('d', d => arcOuter(d));
 
@@ -169,6 +173,7 @@ class Chart {
       .enter()
       .append('text')
       .attr('class', (d, idx) => 'legendLabel')
+      .attr('id', (d) => 'legendLabel_' + sanitizeId(d.name))
       .attr('x', 0)
       .attr('dy', 8)
       .attr('text-anchor', 'middle')
