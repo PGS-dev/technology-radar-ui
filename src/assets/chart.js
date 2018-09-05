@@ -18,7 +18,6 @@ import {
   interpolate,
   pointCircle,
   rad2deg,
-  rotate,
   textPercentWidth,
 } from '../common/geometry';
 
