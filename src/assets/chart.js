@@ -39,6 +39,24 @@ class Chart {
     };
   }
 
+  itemLabelMouseEnterHandler(dataItem) {
+    const id = sanitizeId(dataItem.status);
+
+    this.group.select(`#legendArcOuter_${id}`)
+      .classed('active', true);
+
+    this.group.select(`#legendLabel_${id}`)
+      .classed('active', true);
+  }
+
+  itemLabelMouseLeaveHandler() {
+    this.group.selectAll('.legendArcOuter')
+      .classed('active', false);
+
+    this.group.selectAll('.legendLabel')
+      .classed('active', false);
+  }
+
   /* --- DRAWING functions */
   drawDebugLayer() {
     console.warn('--- DEBUG LAYER ---');
@@ -327,6 +345,8 @@ class Chart {
         return this.config.scaleRadialPositionShifted(idx) <= PI ? 'start' : 'end';
       })
       .on('click', this.events.onClick)
+      .on('mouseenter', this.itemLabelMouseEnterHandler.bind(this))
+      .on('mouseleave', this.itemLabelMouseLeaveHandler.bind(this))
       .text(d => `${!!d._isNew ? '* ' : ''} ${d.name}`);
   }
 
