@@ -50,6 +50,8 @@ npm run build
 
 ## Deployment
 
+First install `npm install gh-pages -g` and then:
+
 ``` bash
 npm install
 npm run build
