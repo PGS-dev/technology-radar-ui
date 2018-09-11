@@ -84,6 +84,11 @@
   .legendLabel {
     font-style: normal;
     fill: #333;
+    transition: font-weight .1s;
+
+    &.active {
+      font-weight: bold;
+    }
   }
 
   .legendArcBg {
@@ -93,7 +98,12 @@
 
   .legendArcOuter {
     fill: rgba(255, 255, 255, 0.5);
-  }
+    transition: fill .1s;
+
+    &.active {
+      fill: rgba(255, 255, 255, 0.8);
+    }
+  }  
 
   .RadarChart {
     .ItemLabel {

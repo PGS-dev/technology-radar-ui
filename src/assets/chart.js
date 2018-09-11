@@ -18,10 +18,12 @@ import {
   interpolate,
   pointCircle,
   rad2deg,
-  rotate,
   textPercentWidth,
 } from '../common/geometry';
 
+function sanitizeId(id) {
+  return id.replace(/([^\w:\-\.])/g, '');
+}
 
 class Chart {
   constructor(el, data, onClick, options) {
@@ -35,6 +37,24 @@ class Chart {
     this.events = {
       onClick
     };
+  }
+
+  itemLabelMouseEnterHandler(dataItem) {
+    const id = sanitizeId(dataItem.status);
+
+    this.group.select(`#legendArcOuter_${id}`)
+      .classed('active', true);
+
+    this.group.select(`#legendLabel_${id}`)
+      .classed('active', true);
+  }
+
+  itemLabelMouseLeaveHandler() {
+    this.group.selectAll('.legendArcOuter')
+      .classed('active', false);
+
+    this.group.selectAll('.legendLabel')
+      .classed('active', false);
   }
 
   /* --- DRAWING functions */
@@ -151,6 +171,7 @@ class Chart {
       .enter()
       .append('path')
       .attr('class', 'legendArcOuter')
+      .attr('id', (d) => 'legendArcOuter_' + sanitizeId(d.name))
       .attr('fill', 'red')
       .attr('d', d => arcOuter(d));
 
@@ -170,6 +191,7 @@ class Chart {
       .enter()
       .append('text')
       .attr('class', (d, idx) => 'legendLabel')
+      .attr('id', (d) => 'legendLabel_' + sanitizeId(d.name))
       .attr('x', 0)
       .attr('dy', 8)
       .attr('text-anchor', 'middle')
@@ -323,6 +345,8 @@ class Chart {
         return this.config.scaleRadialPositionShifted(idx) <= PI ? 'start' : 'end';
       })
       .on('click', this.events.onClick)
+      .on('mouseenter', this.itemLabelMouseEnterHandler.bind(this))
+      .on('mouseleave', this.itemLabelMouseLeaveHandler.bind(this))
       .text(d => `${!!d._isNew ? '* ' : ''} ${d.name}`);
   }
 
