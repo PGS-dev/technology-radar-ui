@@ -8,7 +8,7 @@
       <h3 class="section">{{blipDetails.section}}</h3>
       <h4 class="status">{{blipDetails.status}}</h4>
 
-      <p class="description" v-if="blipDetails.description">{{blipDetails.description}}</p>
+      <p class="description" v-if="blipDetails.description" v-html="blipDetails.description"></p>
 
       <div class="history" v-if="blipDetails.history">
         <ul>
